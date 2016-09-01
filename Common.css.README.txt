@@ -1,0 +1,11 @@
+We currently import CSS from Wikipedia directly, this gives us caching etc. Changes on top of 'stock' should be put in 'Tool.css'.
+If needed, the CSS from en.wikipedia's monobook is retreived like:
+
+wget "https://bits.wikimedia.org/en.wikipedia.org/load.php?debug=false&lang=en&modules=mediawiki.legacy.shared%7Cmediawiki.skinning.interface%7Cskins.monobook.styles&only=styles&skin=monobook&*" -O Common.css
+
+At times it might be required to update.
+
+1: Visit http://en.wikipedia.org/wiki/Main_page?useskin=monobook
+2: Inspect the document. find the stylesheet command that is similar
+3: Strip out all modules that might not be needed (like gadgets etc)
+4: Run the above command, but with the up-to-date URL

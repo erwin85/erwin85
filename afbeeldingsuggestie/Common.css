@@ -1,0 +1,40 @@
+@import "http://nl.wikipedia.org/skins-1.5/monobook/main.css";
+@import "http://nl.wikipedia.org/w/index.php?title=MediaWiki:Common.css&action=raw&ctype=text/css&smaxage=2678400";
+
+#column-one {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+#f-poweredbyico {
+	float: left;
+	height: 1%;
+}
+
+#footer {
+	padding: .4em 0 2.2em 0;
+}
+
+#content {
+	min-height: 490px;
+}
+
+.warning {
+    border: 1px solid #c0c090;
+    background-color: #f8eaba;
+    margin: 10px;
+    padding: .2em;
+    text-align:left;
+    width: 400px;
+    font-size:75%;
+}
+
+.warning .erro {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+h3, h4, h5, h6 {
+	font-weight: normal;
+}

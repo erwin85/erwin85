@@ -1,0 +1,623 @@
+/**
+ * Deze stylesheet is bedoeld voor CSS dat in alle skins gebruikt wordt.
+ * CSS wat specifiek betrekking heeft op de vector skin, hoort in [[MediaWiki:Vector.css]].
+ */
+
+/* Fix so <syntaxhighlight> tags and .css and .js pages get normal text size.
+   [[Bugzilla:26204]] */
+div.mw-geshi div,
+div.mw-geshi div pre,
+span.mw-geshi,
+pre.source-css,
+pre.source-javascript {
+  font-family: monospace, "Courier New" !important;
+}
+
+
+/**
+ * class "prettytable" is een oude nog van voordat "wikitable" in de software
+ * kwam. Hier behouden voor compatibiliteit.
+ * Synchroniseer met "wikitable" stijl in mediawiki-core/skins/common/shared.css
+ */
+table.prettytable {
+	margin: 1em 1em 1em 0;
+	background-color: #f9f9f9;
+	border: 1px #aaa solid;
+	border-collapse: collapse;
+	color: black;
+}
+table.prettytable > tr > th,
+table.prettytable > tr > td,
+table.prettytable > * > tr > th,
+table.prettytable > * > tr > td {
+	border: 1px #aaa solid;
+	padding: 0.2em;
+}
+table.prettytable > tr > th,
+table.prettytable > * > tr > th {
+	background-color: #f2f2f2;
+	text-align: center;
+}
+table.prettytable > caption {
+	font-weight: bold;
+}
+
+/**
+ * Aangepaste stijl voor kopjes voor wikitable/prettytable
+ */
+table.wikitable > tr > th,
+table.wikitable > * > tr > th,
+table.prettytable > tr > th,
+table.prettytable > * > tr > th {
+	background-color: #ddd;
+}
+
+/**
+ * Infobox
+ * Maakt een tabel met grijze achtergrond en lijnen, met een donkergrijze kop. Deze tabel is rechts uitgelijnd.
+ * (Deze infobox-style is gekopieerd van en-wikipedia, waar deze veel gebruikt wordt.
+ */
+.infobox {
+	border: 1px solid #aaaaaa;
+	background-color: #f9f9f9;
+	color: black;
+	margin-bottom: 0.5em;
+	margin-left: 1em;
+	padding: 0.2em;
+	float: right;
+	clear: right;
+}
+.infobox td,
+.infobox th {
+	vertical-align: top;
+}
+.infobox caption {
+	font-size: larger;
+	margin-left: inherit;
+}
+.infobox.bordered {
+	border-collapse: collapse;
+}
+.infobox.bordered td,
+.infobox.bordered th {
+	border: 1px solid #aaaaaa;
+}
+.infobox.bordered .borderless td,
+.infobox.bordered .borderless th {
+	border: 0;
+}
+.infobox.sisterproject {
+	width: 20em;
+	font-size: 90%;
+}
+
+/* styles for bordered infobox with merged rows */
+.infobox.bordered .mergedtoprow td,
+.infobox.bordered .mergedtoprow th {
+	border: 0;
+	border-top: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+}
+.infobox.bordered .mergedrow td,
+.infobox.bordered .mergedrow th {
+	border: 0;
+	border-right: 1px solid #aaaaaa;
+}
+
+/**
+ * Kopcellen links uitlijnen.
+ */
+.thleft th,
+th.thleft {
+	text-align: left;
+}
+
+/**
+ * Maak gehele tabel in één keer valign=top,
+ * Ter vervanging van <nowiki>valign=top</nowiki> op elke cel.
+ * Gebruik: <nowiki>{| class='vatop' </nowiki>
+ */
+.vatop tr,
+tr.vatop,
+.vatop td,
+.vatop th {
+	vertical-align: top;
+}
+
+/**
+ * In- en uitklapfunctie
+ * Wordt o.a. gebruikt in [[Sjabloon:Toggletext]] / [[Sjabloon:Uitklappen]].
+ */
+div.UitklapFrame {
+	clear: both;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #aaa;
+	border-collapse: collapse;
+	background-color: #f9f9f9;
+	font-size: 95%;
+}
+div.UitklapFrameNoClear {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #aaa;
+	border-collapse: collapse;
+	background-color: #f9f9f9;
+	font-size: 95%;
+}
+div.UitklapFrame div.UitklapHead {
+	padding: 0 .5em;
+	text-align: center;
+	font-weight: bold;
+	background-color: #ddd;
+}
+div.UitklapFrame div.UitklapContent {
+	padding: 5px;
+}
+div.UitklapEind {
+	clear: both;
+}
+a.UitklapToggle {
+	font-size: x-small;
+	float: right;
+	padding: 0 .5em;
+}
+
+a.UitklapToggle:hover{
+	cursor: pointer;
+}
+
+/**
+ * NavFrame (van [[:en:MediaWiki:Common.js]])
+ * Standard Navigationsleisten, aka box hiding thingy from .de. Documentation at [[Wikipedia:NavFrame]].
+ */
+div.Boxmerge,
+div.NavFrame {
+	margin: 0px;
+	padding: 4px;
+	border: 1px solid #aaa;
+	text-align: center;
+	border-collapse: collapse;
+	font-size: 95%;
+}
+div.Boxmerge div.NavFrame {
+	border-style: none;
+	border-style: hidden;
+}
+div.NavFrame + div.NavFrame {
+	border-top-style: none;
+	border-top-style: hidden;
+}
+div.NavPic {
+	background-color: #fff;
+	margin: 0px;
+	padding: 2px;
+	float: left;
+}
+div.NavFrame div.NavHead {
+	height: 1.6em;
+	font-weight: bold;
+	background-color: #ccf;
+	position: relative;
+}
+div.NavFrame p {
+	font-size: 100%;
+}
+div.NavFrame div.NavContent {
+	font-size: 100%;
+}
+div.NavFrame div.NavContent p {
+	font-size: 100%;
+}
+div.NavEnd {
+	margin: 0px;
+	padding: 0px;
+	line-height: 1px;
+	clear: both;
+}
+a.NavToggle {
+	position: absolute;
+	top: 0px;
+	right: 3px;
+	font-weight: normal;
+	font-size: smaller;
+}
+
+/**
+ * Redirects cursief en groen in Speciaal:Allpages en Speciaal:Prefixindex,
+ * alsook in het scherm 'Volglijst bewerken'.
+ * Bij verandering, werk dan ook [[MediaWiki:Prefixindex-summary]] bij.
+ */
+.allpagesredirect a,
+.redirect-in-category a,
+.watchlistredir {
+	color: green;
+}
+.allpagesredirect a:visited {
+	color: #004000;
+}
+
+/**
+ * Box op je volglijst met links naar andere volglijsten standaard niet afgebeeld
+ * om het te tonen verander je het in 'display: block' in je eigen css
+ */
+#volglijstkader {
+	display: none;
+}
+
+/* Standaard categorieboom in Categorie:Alles verbergen */
+body.page-Categorie_Alles #mw-subcategories,
+body.page-Categorie_Alles #mw-pages {
+	display: none !important;
+}
+
+/* Afbeeldingen naastelkaar uitgelijnd */
+.afbnaastelkaar .floatleft,
+.afbnaastelkaar .tleft {
+	clear: none;
+}
+
+/* Binnen deze class krijgt de TOC geen border en achtergrondkleur */
+.toczonderstijl #toc,
+.toczonderstijl .toc {
+	border: none;
+	background-color: transparent;
+	padding: 0;
+}
+.tocbreed #toc,
+.tocbreed .toc {
+        width: 100%;
+}
+
+/**
+ * achtergrondkleur target reference lichtblauw
+ * zodat de gewenste referentie makkelijk te vinden is
+ * overgenomen uit en.wikipedia, werkt niet in Internet Explorer en oudere versies van andere browsers welke nog niet CSS3
+ * ondersteunen
+ */
+ol.references > li:target {
+	background-color: #DEF;
+}
+
+/* Kolommen van gelijke breedte op categoriepagina's */
+#mw-subcategories td,
+#mw-pages td {
+	width: 33%;
+}
+
+/* Zet de hoogte van de bewerkknoppenbalk al voor het laden vast */
+#toolbar {
+	position: relative;
+	height: 22px;
+	margin-top: 1em;
+}
+
+/**
+ * Fix om [[Sjabloon:Code]] goed weer te geven
+ * https://nl.wikibooks.org/?title=MediaWiki:Monobook.css&oldid=83526
+ */
+.CodeSjabloon pre {
+	border: 0;
+	background: transparent;
+	overflow: auto;
+}
+
+/* Deleted-notice: Melding als een niet-bestaande pagina al eens verwijderd is. */
+#mw-deleted-notice {
+	margin-bottom: 10px !important;
+}
+
+/* Bewerklink bij een sectie een kleinere letter */
+span.editsection {
+	font-size: x-small;
+}
+
+/**
+ * Interprojectlinks, zie [[MediaWiki:Common.js]]
+ */
+.interProject {
+	display: none;
+	clear: both;
+	border-top: 2px dotted #AAAAAA;
+	margin-top: 2em;
+}
+
+/**
+ * [[Sjabloon:Coördinaten]]
+ * CSS-klasse voor [[Sjabloon:Coördinaten]], [[Sjabloon:Coor title dms]] e.a.
+ */
+#coordinates {
+	line-height: 1.2em;
+	position: absolute;
+	z-index: 1;
+	right: 12px;
+	top: 0.6em;
+	padding-left: .5em;
+	text-align: center;
+	font-size: 85%;
+}
+
+/**
+ * Hoofdpagina
+ * Onderstaande wijzigingen zijn noodzakelijk voor de layout van de nieuwe hoofdpagina
+ */
+/* Tonen van de borders voor Internet Explorer */
+.BGorange1 {
+	background-image: url(//upload.wikimedia.org/wikipedia/commons/0/02/BGorange1.jpg);
+	background-repeat: repeat-x;
+}
+.BGorange2 {
+	background-image: url(//upload.wikimedia.org/wikipedia/commons/a/a7/BGorange2.jpg);
+	background-repeat: repeat-x;
+}
+.PPcornerTop {
+	background-image: url(//upload.wikimedia.org/wikipedia/commons/7/75/PPcornerTop2nl.gif);
+	background-position: top left;
+	background-repeat: no-repeat;
+	width: 10px;
+	height: 10px;
+}
+.PPcornerBottom {
+	background-image: url(//upload.wikimedia.org/wikipedia/commons/b/bb/PPcornerBottomnl2.gif);
+	background-position: bottom left;
+	background-repeat: no-repeat;
+	width: 10px;
+	height: 10px;
+}
+
+.page-Hoofdpagina.action-view .firstHeading {
+	display: none;
+}
+
+/* Change the external link icon to an Adobe icon anywhere the PDFlink class
+is used (notably Template:PDFlink). This works in IE, unlike the above. */
+span.PDFlink a {
+	background: url(//upload.wikimedia.org/wikipedia/commons/8/83/15x18-fileicon-pdf.png) center right no-repeat !important;
+	padding-right: 17px !important;
+}
+
+/* Referenties: make the list of references look smaller */
+ol.references {
+	font-size: 100%;
+}
+.references-small {
+	font-size: 90%;
+}
+
+/**
+ * Inhoudsopgave (Van en.wikipedia.org)
+ * Allow limiting of which header levels are shown in a TOC; <div class='toclimit-3'>, for
+ * instance, will limit to showing ==headings== and ===headings=== but no further (as long as
+ * there are no =headings= on the page, which there shouldn't be according to the MoS).
+ */
+.toclimit-2 .toclevel-2,
+.toclimit-3 .toclevel-3,
+.toclimit-4 .toclevel-4,
+.toclimit-5 .toclevel-5,
+.toclimit-6 .toclevel-6 {
+	display: none;
+}
+
+/* on red bg */
+.fundraiser-button,
+.fundraiser-button a:link,
+.fundraiser-button a:active,
+.fundraiser-button a:visited {
+	color: white;
+}
+
+/* Metadata (bijv. [[Wikipedia:Persoonsgegevens|Persoonsgegevens]]) */
+table.metadata {
+	border: 1px solid #aaaaaa;
+	display: none;
+}
+.metadata-label {
+	color: #aaaaaa;
+}
+
+/* Recent gewijzigde pagina's op volglijst niet vet */
+.page-Speciaal_Volglijst strong.mw-watched {
+	font-weight: normal;
+}
+
+/* Geen groene balken in de bewerkingsgeschiedenis */
+.updatedmarker {
+	display: none;
+}
+
+/**
+ * 'Alle paginas markeren als bezocht' op volglijst verbergen
+ * .page-Speciaal_Volglijst table+p+form {display:none;}
+ * Vanwege aanpassingen in MediaWiki:Watchlist-details
+ */
+div.watchlist-messages + p + form {
+	display: none;
+}
+
+/* Ten behoeve van de Titel_item (zodat de sjablonen niet direct tegen elkaar staan) */
+.Titel_item {
+	padding-left: 15px;
+}
+
+/* Voor de rechterbovenmargesjablonen */
+/* Verbeterde versie, op deze manier krijgen niet-javascript browsers ook een nette versie te zien */
+/* Zodat pagina's elkaar niet overlappen */
+.Titel_item2 {
+	float: right;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.Titel_item3 {
+	float: right;
+	padding-left: 10px;
+	display: block;
+}
+.Titel_item2#Beveiligd,
+.Titel_item2#Titelbeveiligd,
+.Titel_item2#Semibeveiligd {
+	right: 5px;
+}
+.Titel_item2#Etalage {
+	right: 170px;
+}
+.Titel_item2#Woordenboek {
+	right: 196px;
+}
+.Titel_item2#Coordinaten {
+	right: 219px;
+}
+.Titel_item2#Commons {
+	right: 285px;
+}
+
+/**
+ * Top icons styling
+ * Zie ook JS
+ */
+/* Fallback for non-javascript */
+.Top_icon_raw {
+	float: right;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.Top_icon_raw#tpl_Beveiligd,
+.Top_icon_raw#tpl_TitelBeveiligd,
+.Top_icon_raw#tpl_Semibeveiligd {
+	right: 0px;
+}
+.Top_icon_raw#tpl_Etalage {
+	right: 170px;
+}
+.Top_icon_raw#tpl_Woordenboek {
+	right: 196px;
+}
+.Top_icon_raw#tpl_Coordinaten {
+	right: 219px;
+	width: 250px;
+}
+.Top_icon_raw#tpl_Commons {
+	right: 285px;
+}
+/* JavaScript only */
+.Top_icon_dynamic {
+	float: right;
+	padding-left: 10px;
+	font-size: 50%;
+	width: auto !important;
+}
+.Top_icon_raw p,
+.Top_icon_dynamic p {
+	padding: 0;
+	margin: 0;
+}
+
+
+/* Poppetje weg rechtsboven in voor anoniemen (staat ook al bij 'Niet aangemeld' een poppetje */
+li#pt-login {
+	background: transparent;
+	padding-left: 0px !important;
+}
+
+/* "Verouderde" speciale pagina's op Speciaal:SpecialePaginas in italics */
+.mw-specialpagecached {
+        font-style:italic;
+}
+
+/* Babel-extensie */
+div.mw-babel-box table th {
+ font-family: Arial;
+}
+div.mw-babel-box-1, div.mw-babel-box-2, div.mw-babel-box-3 {
+ border-color: #99B3FF;
+}
+div.mw-babel-box-1 table th, div.mw-babel-box-2 table th, div.mw-babel-box-3 table th {
+ background-color: #99B3FF;
+}
+div.mw-babel-box-1 table td, div.mw-babel-box-2 table td, div.mw-babel-box-3 table td {
+ background-color: #E0E8FF;
+}
+div.mw-babel-box-5 {
+ border-color: #6ef7a7;
+}
+div.mw-babel-box-5 table th {
+ background-color: #6ef7a7;
+}
+div.mw-babel-box-5 table td {
+ background-color: #c5fcdc;
+}
+div.mw-babel-box-4 {
+ border-color: #77E0E8;
+}
+div.mw-babel-box-4 table th {
+ background-color: #77E0E8;
+}
+div.mw-babel-box-4 table td {
+ background-color: #D0F8FF;
+}
+div.mw-babel-box-0 {
+ border-color: #ffb3b3;
+}
+div.mw-babel-box-0 table th {
+ background-color: #ffb3b3;
+}
+div.mw-babel-box-0 table td {
+ background-color: #ffe0e8;
+}
+
+/* strepen tussen de verschillende nominaties */
+.page-Wikipedia_Etalage_Aanmelding_kandidaten_Aanmeldingen h3 {
+    border-top:1px solid #AAAAAA;
+    margin-top:1em;
+}
+
+/* Verberg de mobiele Wiki Loves Monuments banner op de normale hoofdpagina */
+#mf-wlm-banner { display: none; }
+
+
+/**
+ * Stijl voor aftakking lijsten
+ * Zie Sjabloon:Stamboom2
+ */
+.treeview ul {
+    margin: 0;
+    padding: 0;
+}
+.treeview li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    list-style-image: none;
+    zoom: 1; /* Trigger inline-block in IE6 */
+}
+.treeview li li {
+    background: url(//upload.wikimedia.org/wikipedia/commons/f/f2/Treeview-grey-line.png) no-repeat 0 -2981px;
+    /* @noflip */
+    padding-left: 20px;
+    text-indent: 0.3em;
+}
+.treeview li li.lastline {
+    background-position: 0 -5971px;
+}
+.treeview li.emptyline > ul {
+    /* @noflip */
+    margin-left: -1px;
+}
+.treeview li.emptyline > ul > li:first-child {
+    background-position: 0 9px
+}
+
+/* Scherp logo op beeldschermen met een hogere pixeldichtheid, zie [[MediaZilla:35337]] */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+        #p-logo a {
+                background-image: url("//upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wikipedia-logo-v2-nl.svg/204px-Wikipedia-logo-v2-nl.svg.png") !important;
+                background-size: 136px auto;
+        }
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+        #p-logo a {
+                background-image: url("//upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wikipedia-logo-v2-nl.svg/270px-Wikipedia-logo-v2-nl.svg.png") !important;
+                background-size: 135px auto;
+        }
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>{title}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="Common.css" rel="stylesheet" type="text/css">
+    {scripts}
+</head>
+<body>
+    <div id="globalWrapper">
+        <div id="content">
+            <h2>{pagetitle}</h2>
+            
+            <div style = "float: right; margin-left: 5px;">
+                <h3>Replag</h3>
+                <a href = "http://tools.wikimedia.de/~dab/wikilist.html">s1</a>: {replag_s1}<br />
+                <a href = "http://tools.wikimedia.de/~dab/wikilist.html">s2</a>: {replag_s2}<br />
+                <a href = "http://tools.wikimedia.de/~dab/wikilist.html">s3</a>: {replag_s3}<br />
+            </div>
+            
+            {warning}
+                   
+            {content}
+        </div>
+
+        <div id="column-one">
+            <div class="portlet" id="p-logo">
+                <a style="background-image: url(http://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Wikimedia_Community_Logo-Toolserver.svg/135px-Wikimedia_Community_Logo-Toolserver.svg.png);" href="http://tools.wikimedia.org/~erwin85/" title="Home"></a>
+            </div>
+            <div class="portlet" id="p-navigation">
+                <h5>erwin85's tools</h5>
+                <div class="pBody">
+                    <ul>
+                        <li><a href="catanalyzer.php">catanalyzer</a></li>
+                        <li><a href="catcount.php">catcount</a></li>
+                        <li><a href="categorycount.php">categorycount</a></li>
+                        <li><a href="contribs.php">contribs</a></li>
+                        <li><a href="randomarticle.php">random article</a></li>
+                        <li><a href="relatedchanges.php">related changes</a></li>
+                        <li><a href="shortpages.php">short pages</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class='portlet' id='p-navigation2'>
+                <h5>navigation</h5>
+                <div class='pBody'>
+                    <ul>
+                        <li><a href="http://tools.wikimedia.de" title="Toolserver">Toolserver</a></li>
+                        <li><a href="http://tools.wikimedia.de/~interiot/cgi-bin/tstoc" title="Toolserver TOC">Toolserver TOC</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="portlet" id="p-tb">
+                <h5>Toolbox</h5>
+                <div class="pBody">
+			        <ul>
+			            <li><a href="http://infra.ts.wikimedia.org/jira/browse/ERWIN" title="Bug report">Bug report</a></li>
+			            <li><a href="http://infra.ts.wikimedia.org/fisheye/browse/erwin85" title="SVN repository">SVN repository</a></li>
+                    </ul>
+                </div>
+            </div>
+	
+        </div>
+        
+        <div id="footer">
+            <div id="f-poweredbyico">
+                <a href="/"><img style = "border:0; float:left; padding: 5px;" src="http://tools.wikimedia.de/images/wikimedia-toolserver-button.png" alt="Powered by Wikimedia Toolserver" title="Powered by Wikimedia Toolserver" height="31" width="88"></a>
+            </div>
+            <ul id="f-list">
+                <li id="lastmod">This page was last modified {modified}.</li>
+                <li id="about">This tool is written by <a href="http://nl.wikipedia.org/wiki/Gebruiker:Erwin">Erwin85</a>.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+table.stats {
+ /*   border: solid 1px #6666aa;*/
+    border-collapse: collapse;
+    margin: 20px;
+}
+td, th {
+    padding: 0.1em 0.3em 0.1em 0.3em;
+    text-align: center;
+}
+th {
+    vertical-align: top;
+}
+table.stats tr {
+    border-bottom: solid 1px black;
+}
+table.stats th {    
+}
+td.nprojects {
+    text-align: right;
+}
+td.editcount {
+    border-right: solid 1px black;
+    text-align: left;
+}
+table.stats tr.xwikiness {
+    border-bottom: 0px;
+}
+

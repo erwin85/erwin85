@@ -1,0 +1,4 @@
+/* 'sitewide' overrides to the monobook skin' */
+.mw-wiki-logo {
+  background-image: url(//upload.wikimedia.org/wikipedia/commons/thumb/b/be/Wikimedia_Community_Logo-Toolserver.svg/135px-Wikimedia_Community_Logo-Toolserver.svg.png);
+}
