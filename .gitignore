@@ -1,0 +1,6 @@
+*.save*
+*.bak
+.old*
+cache
+tmp
+xcontribs old
