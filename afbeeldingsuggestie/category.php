@@ -24,7 +24,7 @@ require_once '../inc/header.inc.php';
 <?php
 if (!empty($_SERVER['QUERY_STRING']))
 {
-    $category = mysql_escape_string($_GET['category']);  
+    $category = mysql_real_escape_string($_GET['category']);  
     $category = ucfirst(str_replace(' ', '_', $category));
     
     if (!$category) {

@@ -39,7 +39,7 @@ if (!empty($_SERVER['QUERY_STRING']))
 	$lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
     $uselang = mysql_real_escape_string($_GET['uselang']);
-    $users = mysql_escape_string($_GET['users']);
+    $users = mysql_real_escape_string($_GET['users']);
     
     $ausers = explode('|', $users);	
     
@@ -55,11 +55,11 @@ if (!empty($_SERVER['QUERY_STRING']))
 	    $domain = $lang . '.' . $family . '.org';
 	}
 	
-	$order = mysql_escape_string($_GET['order']);
+	$order = mysql_real_escape_string($_GET['order']);
 	$order = ($order != 'ASC' ? 'DESC' : 'ASC');
 	
 	//The number of contributions to return
-	$limit = mysql_escape_string($_GET['limit']);
+	$limit = mysql_real_escape_string($_GET['limit']);
 	
 	if ($limit)	{
 		$limit = intval($limit);

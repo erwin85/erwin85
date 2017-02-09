@@ -18,8 +18,8 @@ if (!empty($_SERVER['QUERY_STRING']))
 {
     $lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
-    $category = mysql_escape_string($_GET['category']);
-    $ignore = mysql_escape_string($_GET['ignore']);
+    $category = mysql_real_escape_string($_GET['category']);
+    $ignore = mysql_real_escape_string($_GET['ignore']);
     
     $category = str_replace(' ', '_', $category);
     // Get domain name and check project

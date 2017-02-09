@@ -53,10 +53,10 @@ if (!empty($_SERVER['QUERY_STRING']))
     $uselang = mysql_real_escape_string($_GET['uselang']);
     $t1 = mysql_real_escape_string($_GET['t1']);
     $t2 = mysql_real_escape_string($_GET['t2']);
-   	$namespace = mysql_escape_string($_GET['namespaces']);
-   	$invert = mysql_escape_string($_GET['invert']);
-   	$limit = mysql_escape_string($_GET['limit']);
-   	$offset = mysql_escape_string($_GET['offset']);
+   	$namespace = mysql_real_escape_string($_GET['namespaces']);
+   	$invert = mysql_real_escape_string($_GET['invert']);
+   	$limit = mysql_real_escape_string($_GET['limit']);
+   	$offset = mysql_real_escape_string($_GET['offset']);
     
     // Get domain name and check project
 	if ($family == 'commons') {

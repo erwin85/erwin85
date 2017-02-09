@@ -17,8 +17,8 @@ if (!empty($_SERVER['QUERY_STRING']))
 {
     $lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
-    $pcategory = mysql_escape_string($_GET['pcategory']);
-    $tpcategory = mysql_escape_string($_GET['tpcategory']);
+    $pcategory = mysql_real_escape_string($_GET['pcategory']);
+    $tpcategory = mysql_real_escape_string($_GET['tpcategory']);
     
     $pcategory = str_replace(' ', '_', $pcategory);
     $tpcategory = str_replace(' ', '_', $tpcategory);

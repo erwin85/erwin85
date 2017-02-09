@@ -13,9 +13,9 @@ if (!empty($_SERVER['QUERY_STRING']))
     // Get variables
     $lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
-    $categories = mysql_escape_string($_GET['categories']);
-    $namespace = mysql_escape_string($_GET['namespaces']);
-    $invert = mysql_escape_string($_GET['invert']);
+    $categories = mysql_real_escape_string($_GET['categories']);
+    $namespace = mysql_real_escape_string($_GET['namespaces']);
+    $invert = mysql_real_escape_string($_GET['invert']);
 
     // Get domain name and check project
     if ($family == 'commons') {

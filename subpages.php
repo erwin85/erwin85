@@ -20,7 +20,7 @@ if (!empty($_SERVER['QUERY_STRING'])) {
     $lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
     $title = mysql_real_escape_string($_GET['title']);
-    $namespace = mysql_escape_string($_GET['namespaces']);
+    $namespace = mysql_real_escape_string($_GET['namespaces']);
     
     // Get domain name and check project
 	if ($family == 'commons') {
