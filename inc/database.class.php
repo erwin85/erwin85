@@ -213,7 +213,7 @@ function getDBname ( $language , $project ) {
     	$ret .= '.labsdb' ;
         return $ret ;
 */
-        $sql = "SELECT slice FROM meta_p.wiki WHERE url LIKE '%" . $domain . "'";
+        $sql = "SELECT slice FROM meta_p.wiki WHERE url = 'https://" . $domain . "'";
         $q = $this->performQuery($sql, $server = 'any');
         if ($q) {
             $result = mysql_fetch_assoc($q);
@@ -243,7 +243,7 @@ function getDBname ( $language , $project ) {
     	$ret .= '_p' ;
     	return $ret ;
 */
-        $sql = "SELECT dbname FROM meta_p.wiki WHERE url LIKE '%" . $domain . "'";
+        $sql = "SELECT dbname FROM meta_p.wiki WHERE url = 'https://" . $domain . "'";
         $q = $this->performQuery($sql, $server = 'any');
         if ($q) {
             $result = mysql_fetch_assoc($q);
