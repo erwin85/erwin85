@@ -20,57 +20,57 @@ if (!empty($_SERVER['QUERY_STRING'])) {
     $lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
     $title = mysql_real_escape_string($_GET['title']);
-    $namespace = mysql_escape_string($_GET['namespaces']);
-    
-    // Get domain name and check project
-	if ($family == 'commons') {
-		$domain = 'commons.wikimedia.org';
-	} elseif ($family =='meta') {
-		$domain = 'meta.wikimedia.org';
-	} else {
-	   	if (!$lang || !$family) {
-    		trigger_error("Please select a project.", E_USER_ERROR);
-    	}
-	    $domain = $lang . '.' . $family . '.org';
-	}
-	
-	// Check category
-	if (!$title) {
-	    trigger_error("Please enter a title.", E_USER_ERROR);
-	}    
-	
+    $namespace = mysql_real_escape_string($_GET['namespaces']);
 
-	$cluster = $db->getCluster($domain);
-	
-	if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
-	    trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
-	} else {
-    	$db_name = $db->getDatabase($domain);
-    	$ns_name = ($namespace != -1 ? $db->getNamespace(intval($namespace), $db_name) : '');
+    // Get domain name and check project
+        if ($family == 'commons') {
+                $domain = 'commons.wikimedia.org';
+        } elseif ($family =='meta') {
+                $domain = 'meta.wikimedia.org';
+        } else {
+                if (!$lang || !$family) {
+                trigger_error("Please select a project.", E_USER_ERROR);
+        }
+            $domain = $lang . '.' . $family . '.org';
+        }
+
+        // Check category
+        if (!$title) {
+            trigger_error("Please enter a title.", E_USER_ERROR);
+        }
+
+
+        $cluster = $db->getCluster($domain);
+
+        if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
+            trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
+        } else {
+        $db_name = $db->getDatabase($domain);
+        $ns_name = ($namespace != -1 ? $db->getNamespace(intval($namespace), $db_name) : '');
         if(!$ns_name == '') $ns_name .= ':';
-	    $title = ucfirst(str_replace(' ', '_', $title));
-	    $namespacecond = ($namespace != -1 ? 'page_namespace = ' . intval($namespace) : 'page_namespace = 0');
+            $title = ucfirst(str_replace(' ', '_', $title));
+            $namespacecond = ($namespace != -1 ? 'page_namespace = ' . intval($namespace) : 'page_namespace = 0');
 
         $sql = 'SELECT page_namespace, page_title FROM ' . $db_name . '.page WHERE page_title LIKE \''. $title . '/%\''
                  . ($namespacecond ? ' AND ' . $namespacecond : '');
 
         #echo '<pre>' . $sql . '</pre>';
-    	$q = $db->performQuery($sql, $cluster);
+        $q = $db->performQuery($sql, $cluster);
 
-	    if (!$q) {
-		    trigger_error('Database query failed.', E_USER_ERROR);
-	    }
-	
+            if (!$q) {
+                    trigger_error('Database query failed.', E_USER_ERROR);
+            }
+
         echo '<pre>';
         echo $ns_name . $title . "\n";
         while ($row = mysql_fetch_assoc($q)) {
-        	$namespace =  $db->getNamespace($row['page_namespace'], $db_name);
-        	if(!$namespace == '') $namespace .= ':';
+                $namespace =  $db->getNamespace($row['page_namespace'], $db_name);
+                if(!$namespace == '') $namespace .= ':';
             echo $namespace . $row['page_title'] . "\n";
         }
         echo '</pre>';
-       	$executiontime =  time() - $_SERVER['REQUEST_TIME'];
-    	echo '<p style="font-size:80%;">Execution time: ' . $executiontime . ' seconds.</p>';
+        $executiontime =  time() - $_SERVER['REQUEST_TIME'];
+        echo '<p style="font-size:80%;">Execution time: ' . $executiontime . ' seconds.</p>';
     }
 } else {
 ?>
@@ -107,19 +107,19 @@ if (!empty($_SERVER['QUERY_STRING'])) {
     </td>
 </tr>
 <tr>
-	<td style = "text-align: right;">
-		Title:
-	</td>
-	<td>
-		<input type="text" name="title">
-	</td>
+        <td style = "text-align: right;">
+                Title:
+        </td>
+        <td>
+                <input type="text" name="title">
+        </td>
 </tr>
 <tr>
-	<td>&nbsp;</td>
-	<td>
-		<input type="submit" value="Submit" name="submit">
-	</td>
-	<td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>
+                <input type="submit" value="Submit" name="submit">
+        </td>
+        <td>&nbsp;</td>
 </tr></tbody></table></form>
 <?php
 }

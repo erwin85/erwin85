@@ -25,7 +25,7 @@ $dbname = mysql_real_escape_string($_GET['dbname']);
 $sysops = mysql_real_escape_string($_GET['sysops']);
 $timestamp = mysql_real_escape_string($_GET['timestamp']);
 $namespaceFilter = mysql_real_escape_string($_GET['namespace']);
-    
+
 if ($family) {
     switch($family) {
         case 'commons':
@@ -44,7 +44,7 @@ if ($family) {
     $dbname = (substr($dbname, -2) != '_p') ? $dbname . '_p' : $dbname;
     $domain = $db->getDomain($dbname);
 }
-    
+
 if (!isset($domain)) {
     $timestamp = (strlen($timestamp) == 8 ? $timestamp . '000000' : $timestamp);
     if (!preg_match('/\d{14}/', $timestamp) && !empty($timestamp)) {
@@ -129,7 +129,7 @@ if (!isset($domain)) {
     }
 
     $itotalwikis = mysql_num_rows($q);
-    
+
     while ($row = mysql_fetch_assoc($q)) {
         $adbname[] = $row['dbname'];
         $alang[] = $row['lang'];
@@ -148,7 +148,7 @@ if (!isset($domain)) {
 
 $progress = 0; //Progress bar
 $iwikis = 0;
-$ipages = 0;  
+$ipages = 0;
 ?>
 <div id="progress">
 <p>Checking <?=$itotalwikis;?> wiki's.</p>
@@ -180,20 +180,20 @@ foreach($adbname as $key => $dbname) {
         if ($domain == 'en.wikipedia.org') {
             continue;
         }
-        
+
         $sql = 'SELECT count(1) AS sysops FROM ' . $dbname . '_p.user_groups WHERE ug_group = \'sysop\'';
         $q = $db->performQuery($sql, $cluster);
         if (!$q) {
             //trigger_error('Database query failed.', E_USER_ERROR);
             continue;
         }
-        
+
         $isysops = mysql_result($q, 0);
 
         if ($isysops > $sysops) {
             continue;
         }
-        
+
         if (!empty($timestamp)) {
             $sql = 'SELECT user_name, log_timestamp
                     FROM ' . $dbname . '_p.logging_userindex
@@ -216,7 +216,7 @@ foreach($adbname as $key => $dbname) {
                 $slast = 'Last sysop action: ' . formatDate($ltimestamp) . ' by ' . $result['user_name'] . '; ';
             }
         }
-              
+
         // Get template
         $sql = 'SELECT pl_title FROM ' . $dbname . '_p.pagelinks
                 LEFT JOIN ' . $dbname . '_p.page
@@ -233,13 +233,13 @@ foreach($adbname as $key => $dbname) {
         } else {
             $template = 'Delete';
         }
-       
-	if ( is_numeric( $namespaceFilter ) ) {
-		$sqlNs = 'AND tl_from_namespace = ' . $namespaceFilter;
-	} else {
-		$sqlNs = '';
-	}
- 
+
+        if ( is_numeric( $namespaceFilter ) ) {
+                $sqlNs = 'AND tl_from_namespace = ' . $namespaceFilter;
+        } else {
+                $sqlNs = '';
+        }
+
         $sql = 'SELECT ns_name, page_title, rev_id, rev_timestamp, rev_user_text, rev_comment, rev_minor_edit
                 FROM ' . $dbname . '_p.page
                 LEFT JOIN ' . $dbname . '_p.templatelinks
@@ -252,7 +252,7 @@ foreach($adbname as $key => $dbname) {
                 AND tl_namespace = 10 ' . $sqlNs . '
                 AND dbname = "' . $dbname . '_p"
                 AND rev_timestamp = (SELECT max(rev_timestamp) FROM ' . $dbname . '_p.revision AS r
-                                    WHERE rev_page = page_id) 
+                                    WHERE rev_page = page_id)
                 GROUP BY page_id';
         $q = $db->performQuery($sql, $cluster);
         if (!$q)
@@ -264,7 +264,7 @@ foreach($adbname as $key => $dbname) {
         //echo '<pre>' . $sql . '</pre>';
         //Number of results
         $iresults = mysql_num_rows($q);
-       
+
         //Output results
         if ($iresults) {
             $ipages += $iresults;
@@ -273,7 +273,7 @@ foreach($adbname as $key => $dbname) {
             There are <b>' . $iresults . '</b> linking pages to {{<a href="' . $domain_url . '/w/index.php?title=Special:Whatlinkshere/Template:' . $template . '&hideredirs=1&hidelinks=1" title="Pages linking to Template:' . $template . '">' . $template . '</a>}}.
              The project has <b>' . $isysops . '</b> <a href="' . $domain_url . '/w/index.php?title=Special:Userlist&group=sysop" title="Sysop list">sysops</a>.<br /><small>(' . $slast . '<a href="//toolserver.org/~pathoschild/stewardry/?wiki=' . $domain . '">Stewardry</a>)</small>
             <ul>';
-                        
+
             $i = 0;
             while ($row = mysql_fetch_assoc($q))
             {
@@ -281,13 +281,13 @@ foreach($adbname as $key => $dbname) {
                 if(!$namespace == '') $namespace .= ':';
                 $title = $namespace . $row['page_title'];
                 $comment = commentBlock($row['rev_comment'], $namespace . $row['page_title']);
-                
+
                 $ioutput .= '<li>' . ($row['rev_minor_edit'] ? '<span class="minor">m</span>' : '') . ' <a href="' . $domain_url . '/wiki/' . titleLink($title) . '" title="' . $title . '">' . str_replace('_', ' ', $title) . '</a>‎ (<a href="' . $domain_url . '/w/index.php?title=' . titleLink($page_title) . '&amp;diff=prev&amp;oldid=' . $row['rev_id'] . '">diff</a> | <a href="' . $domain_url . '/w/index.php?title=' . titleLink($title) . '&amp;action=history">hist</a> | <a href="' . $domain_url . '/w/index.php?title=Special:Log&page=' . titleLink($title) . '" title="logs">logs</a>) . . ' . formatDate($row['rev_timestamp'], 'en') . '. . <a href="' . $domain_url . '/wiki/User:' . $row['rev_user_text'] . '" title="User:' . $row['rev_user_text'] . '">' . $row['rev_user_text'] . '</a> (<a href="' . $domain_url . '/wiki/User_talk:' . $row['rev_user_text'] . '" title="User talk:' . $row['rev_user_text'] . '">talk</a> | <a href="' . $domain_url . '/wiki/Special:Contributions/' . $row['rev_user_text'] . '" title="Special:Contributions/' . $row['rev_user_text'] . '">contribs</a>) ' . $comment . '</li>';
                 $i++;
             }
             $ioutput .= '</ul>';
-	    // echo $ioutput;
-	    $outputTable[] = array( 'number' => $iresults, 'output' => $ioutput );
+            // echo $ioutput;
+            $outputTable[] = array( 'number' => $iresults, 'output' => $ioutput );
         }
     }
 }

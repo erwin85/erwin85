@@ -17,44 +17,44 @@ require_once 'inc/header.inc.php';
 </p>
 <?php
 if (!empty($_SERVER['QUERY_STRING'])) {
-    
+
     // Get variables
-	$lang = mysql_real_escape_string($_GET['lang']);
+        $lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
     $category = mysql_real_escape_string($_GET['category']);
-    $namespace = mysql_escape_string($_GET['namespaces']);
-    $invert = mysql_escape_string($_GET['invert']);
-    
+    $namespace = mysql_real_escape_string($_GET['namespaces']);
+    $invert = mysql_real_escape_string($_GET['invert']);
+
     // Get domain name and check project
-	if ($family == 'commons') {
-		$domain = 'commons.wikimedia.org';
-	} elseif ($family =='meta') {
-		$domain = 'meta.wikimedia.org';
-	} else {
-	   	if (!$lang || !$family) {
-    		trigger_error("Please select a project.", E_USER_ERROR);
-    	}
-	    $domain = $lang . '.' . $family . '.org';
-	}
-	
-/*	
-	if ($domain == 'en.wikipedia.org') {
+        if ($family == 'commons') {
+                $domain = 'commons.wikimedia.org';
+        } elseif ($family =='meta') {
+                $domain = 'meta.wikimedia.org';
+        } else {
+                if (!$lang || !$family) {
+                trigger_error("Please select a project.", E_USER_ERROR);
+        }
+            $domain = $lang . '.' . $family . '.org';
+        }
+
+/*
+        if ($domain == 'en.wikipedia.org') {
         trigger_error('Sorry, this tool has been disabled for the English Wikipedia.', E_USER_ERROR);
     }
- */   
-    
-	// Check category
-	if (!$category) {
-	    trigger_error("Please enter a category.", E_USER_ERROR);
-	}    
-	
-	$sub = $_GET['subcats'];
+ */
+
+        // Check category
+        if (!$category) {
+            trigger_error("Please enter a category.", E_USER_ERROR);
+        }
+
+        $sub = $_GET['subcats'];
     if ($sub) {
         $sub = True;
     } else {
         $sub = False;
     }
-    
+
     $d = $_GET['d'];
     if ($d) {
         $d = intval($d);
@@ -72,24 +72,24 @@ if (!empty($_SERVER['QUERY_STRING'])) {
         $purge = false;
     }
 
-	$cluster = $db->getCluster($domain);
-	
-	if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
-	    trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
-	} else {
-    	$db_name = $db->getDatabase($domain);
-    	$ns_name = $db->getNamespace(14, $db_name);	
-	    $renewtree = false;
-	    $category = ucfirst(str_replace(' ', '_', $category));
-	    $namespacecond = ($namespace != -1 ? 'page_namespace ' . ($invert ? '!= ' : '= ' ) . intval($namespace) : '');
-	    
-	    if ($sub) {
+        $cluster = $db->getCluster($domain);
+
+        if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
+            trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
+        } else {
+        $db_name = $db->getDatabase($domain);
+        $ns_name = $db->getNamespace(14, $db_name);
+            $renewtree = false;
+            $category = ucfirst(str_replace(' ', '_', $category));
+            $namespacecond = ($namespace != -1 ? 'page_namespace ' . ($invert ? '!= ' : '= ' ) . intval($namespace) : '');
+
+            if ($sub) {
             $sql = 'SHOW TABLES FROM s51362__erwin85 LIKE "sc_' . $db_name . '"';
             $q = $db->performQuery($sql, $cluster);
 
             if (mysql_num_rows($q) != 1) {
                 $renewtree = true;
-            } else {               
+            } else {
                 $sql = 'SELECT sc_timestamp FROM s51362__erwin85.sc_' . $db_name . ' WHERE sc_category = \'' . $category . '\'
                         AND sc_supercategory = \'' . $category . '\'';
                 $q = $db->performQuery($sql, $cluster);
@@ -126,16 +126,16 @@ if (!empty($_SERVER['QUERY_STRING'])) {
              . ($namespacecond ? 'AND ' . $namespacecond : '');
         }
         #echo '<pre>' . $sql . '</pre>';
-    	$q = $db->performQuery($sql, $cluster);
-    	#echo mysql_error($db->link[$cluster]);
-    	if ($q) {
+        $q = $db->performQuery($sql, $cluster);
+        #echo mysql_error($db->link[$cluster]);
+        if ($q) {
             $result = mysql_fetch_assoc($q);
             $count = $result['count'];
         }
 
         echo '<p>There are ' . $count . ' articles in <a href="http://' . $domain . '/wiki/' . $ns_name . ':' . $category. '">' . $ns_name . ':' . $category. '</a> at ' . $domain . '.</p>';
-       	$executiontime =  time() - $_SERVER['REQUEST_TIME'];
-    	echo '<p style="font-size:80%;">Execution time: ' . $executiontime . ' seconds.</p>';
+        $executiontime =  time() - $_SERVER['REQUEST_TIME'];
+        echo '<p style="font-size:80%;">Execution time: ' . $executiontime . ' seconds.</p>';
     }
 } else {
 ?>
@@ -173,12 +173,12 @@ if (!empty($_SERVER['QUERY_STRING'])) {
     </td>
 </tr>
 <tr>
-	<td style = "text-align: right;">
-		Category (without namespace):
-	</td>
-	<td>
-		<input type="text" name="category">
-	</td>
+        <td style = "text-align: right;">
+                Category (without namespace):
+        </td>
+        <td>
+                <input type="text" name="category">
+        </td>
 </tr>
 <tr>
     <td style = "text-align: right;">
@@ -197,11 +197,11 @@ if (!empty($_SERVER['QUERY_STRING'])) {
     </td>
 </tr>
 <tr>
-	<td>&nbsp;</td>
-	<td>
-		<input type="submit" value="Submit" name="submit">
-	</td>
-	<td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>
+                <input type="submit" value="Submit" name="submit">
+        </td>
+        <td>&nbsp;</td>
 </tr></tbody></table></form>
 <?php
 }

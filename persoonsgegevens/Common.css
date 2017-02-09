@@ -2,22 +2,22 @@
 @import "http://nl.wikipedia.org/w/index.php?title=MediaWiki:Common.css&action=raw&ctype=text/css&smaxage=2678400";
 
 #column-one {
-	position: absolute;
-	left: 0;
-	top: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
 }
 
 #f-poweredbyico {
-	float: left;
-	height: 1%;
+        float: left;
+        height: 1%;
 }
 
 #footer {
-	padding: .4em 0 2.2em 0;
+        padding: .4em 0 2.2em 0;
 }
 
 #content {
-	min-height: 380px;
+        min-height: 380px;
 }
 
 .warning {
@@ -36,5 +36,5 @@
 }
 
 h3, h4, h5, h6 {
-	font-weight: normal;
+        font-weight: normal;
 }

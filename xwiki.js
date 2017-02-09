@@ -5,14 +5,14 @@ function showHide(domain)
     if (!node || !link) {
         return;
     }
-    
+
     if (node.style.display == 'none') {
         node.style.display = 'block';
         link.innerHTML = 'Hide';
     } else {
         node.style.display = 'none';
         link.innerHTML = 'Show';
-    }   
+    }
 }
 
 function noLinks(content) {

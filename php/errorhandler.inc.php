@@ -1,102 +1,102 @@
 <?php
 function ErrorHandler($errno, $errstr, $errfile, $errline)
 {
-	$error_msg = $errstr . ' in ' . $errfile . ' on ' . $errline . ' at ' . date("r") . '.';
-	$error_msg_html = $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b> at ' . date("r") . '.';
-	$email_addr = 'erwin85@hemlock.ts.wikimedia.org';
-	$remote_dbg = "localhost";
-	$log_file = '';
-  
-	$email = False;
-	$stdlog = False;
-	$remote = False;
-	$display = True;
-   
-	$notify = True;
-	$halt_script = True;
+        $error_msg = $errstr . ' in ' . $errfile . ' on ' . $errline . ' at ' . date("r") . '.';
+        $error_msg_html = $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b> at ' . date("r") . '.';
+        $email_addr = 'erwin85@hemlock.ts.wikimedia.org';
+        $remote_dbg = "localhost";
+        $log_file = '';
+
+        $email = False;
+        $stdlog = False;
+        $remote = False;
+        $display = True;
+
+        $notify = True;
+        $halt_script = True;
 
 
-	switch($errno)
-	{
-		case E_NOTICE:
-			$halt_script = False;
-			$type = "Notice";
-			$display = False;
-			break;
+        switch($errno)
+        {
+                case E_NOTICE:
+                        $halt_script = False;
+                        $type = "Notice";
+                        $display = False;
+                        break;
 
-		case E_USER_NOTICE:
-			$halt_script = False;
-			$type = "Notice";
-			$error_msg_html = $errstr;
-			break;
+                case E_USER_NOTICE:
+                        $halt_script = False;
+                        $type = "Notice";
+                        $error_msg_html = $errstr;
+                        break;
 
-		case E_COMPILE_WARNING:
-		case E_CORE_WARNING:
-		case E_WARNING:
-			$halt_script = False;
-			$type = "Warning";
-			break;
-		    
-		case E_USER_WARNING:
-			$halt_script = False;
-			$type = "Warning";
-			$error_msg_html = $errstr;
-			break;
+                case E_COMPILE_WARNING:
+                case E_CORE_WARNING:
+                case E_WARNING:
+                        $halt_script = False;
+                        $type = "Warning";
+                        break;
 
-		case E_USER_ERROR:
-			$type = "Fatal Error";
-			$error_msg_html = $errstr;
-			break;
+                case E_USER_WARNING:
+                        $halt_script = False;
+                        $type = "Warning";
+                        $error_msg_html = $errstr;
+                        break;
 
-	    case E_COMPILE_ERROR:
-		case E_CORE_ERROR:
-		case E_ERROR:    
-			$type = "Fatal Error";
-			break;
+                case E_USER_ERROR:
+                        $type = "Fatal Error";
+                        $error_msg_html = $errstr;
+                        break;
 
-		case E_PARSE:
-			$type = "Parse Error";
-			break;
+            case E_COMPILE_ERROR:
+                case E_CORE_ERROR:
+                case E_ERROR:
+                        $type = "Fatal Error";
+                        break;
 
-		default:    
-			$type = "Unknown Error";
-			break;
-	}
+                case E_PARSE:
+                        $type = "Parse Error";
+                        break;
 
-	if($notify)
-	{
-		$error_msg = $type . $error_msg;
+                default:
+                        $type = "Unknown Error";
+                        break;
+        }
 
-		if($email)
-		{
-			error_log($error_msg, 1, $email_addr);
-		}
+        if($notify)
+        {
+                $error_msg = $type . $error_msg;
 
-		if($remote)
-		{
-			error_log($error_msg, 2, $remote_dbg);
-		}
+                if($email)
+                {
+                        error_log($error_msg, 1, $email_addr);
+                }
 
-		if($display)
-		{
-			echo '<br /><b>' .$type . ': </b>' . $error_msg_html;
-		}
+                if($remote)
+                {
+                        error_log($error_msg, 2, $remote_dbg);
+                }
 
-		if($stdlog)
-		{
-			if($log_file == '')
-			{
-				error_log($error_msg, 0);
-			}
-			else
-			{
-				error_log($error_msg, 3, $log_file);
-			}
-		}
-	}
+                if($display)
+                {
+                        echo '<br /><b>' .$type . ': </b>' . $error_msg_html;
+                }
 
-	if($halt_script)
-	{
+                if($stdlog)
+                {
+                        if($log_file == '')
+                        {
+                                error_log($error_msg, 0);
+                        }
+                        else
+                        {
+                                error_log($error_msg, 3, $log_file);
+                        }
+                }
+        }
+
+        if($halt_script)
+        {
 ?>
 </div>
 <div id="column-one">
@@ -132,10 +132,10 @@ function ErrorHandler($errno, $errstr, $errfile, $errline)
 </body>
 </html>
 <?php
-	exit(0);
-	}
+        exit(0);
+        }
 }
 
 set_error_handler('ErrorHandler');
 date_default_timezone_set('UTC');
-?> 
+?>

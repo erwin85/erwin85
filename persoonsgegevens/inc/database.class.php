@@ -3,7 +3,7 @@ class TSDatabase
 {
     //Singleton implementation
     private static $instance;
-    
+
     public $link = array();
     public $status = array();
     private $_dbup = array();
@@ -12,27 +12,27 @@ class TSDatabase
     private $_mysqlconf;
 
     public function __clone() {}
-      
+
     private function __construct($sql_s1 = true, $sql_s2 = true, $sql_s3 = true, $sql = false)
     {
         $this->_setAllStatus();
         $this->_mysqlconf = parse_ini_file('/home/erwin85/.my.cnf');
-        
+
         if ($this->_dbup['sql-s1'] && $sql_s1) {
             $this->_connectHost('sql-s1');
         }
-        
+
         if ($this->_dbup['sql-s2'] && $sql_s2) {
             $this->_connectHost('sql-s2');        }
-        
-        if ($this->_dbup['sql-s3'] && $sql_s3) {        
+
+        if ($this->_dbup['sql-s3'] && $sql_s3) {
             $this->_connectHost('sql-s3');        }
-        
+
         if ($this->_dbup['sql'] && $sql) {
             $this->_connectHost('sql');
         }
      }
-    
+
     public static function singleton($sql_s1 = true, $sql_s2 = true, $sql_s3 = true, $sql = false)
     {
         if (!isset(self::$instance)) {
@@ -42,26 +42,26 @@ class TSDatabase
 
         return self::$instance;
     }
-    
+
     function __destruct()
     {
         if ($this->_dbup['sql-s1'] && $this->_dbconn['sql-s1']) {
             mysql_close($this->link['sql-s1']);
         }
-        
+
         if ($this->_dbup['sql-s2'] && $this->_dbconn['sql-s2']) {
             mysql_close($this->link['sql-s2']);
         }
-        
-        if ($this->_dbup['sql-s3'] && $this->_dbconn['sql-s3']) {        
+
+        if ($this->_dbup['sql-s3'] && $this->_dbconn['sql-s3']) {
             mysql_close($this->link['sql-s3']);
         }
-        
-        if ($this->_dbup['sql'] && $this->_dbconn['sql']) {        
+
+        if ($this->_dbup['sql'] && $this->_dbconn['sql']) {
             mysql_close($this->link['sql']);
         }
     }
-    
+
     /****************************************************
     Public functions
     ****************************************************/
@@ -71,23 +71,23 @@ class TSDatabase
             if (!$this->_dbconn[$cluster]) {
                 $this->_connectHost($cluster);
             }
-            
+
             $link = $this->link[$cluster];
             $q = mysql_query($sql, $link);
             return $q;
         } else {
             return false;
         }
-        
+
     }
-    
+
     //Backwards compatibility
     function performUserQuery($sql)
     {
         return $this->performQuery($sql, 'sql');
-        
+
     }
-    
+
     function getReplag($cluster)
     {
         if (array_key_exists($cluster, $this->_replag)) {
@@ -97,11 +97,11 @@ class TSDatabase
             return $this->_replag[$cluster][1];
         }
     }
-    
+
     function getWarning()
     {
         $warning = '';
-        
+
         foreach (array('sql-s1', 'sql-s2', 'sql-s3', 'sql') as $cluster) {
             if ($this->status[$cluster][0] == 'ERRO' || $this->status[$cluster][0] == 'DOWN') {
                 $class = 'erro';
@@ -114,10 +114,10 @@ class TSDatabase
         if (!empty($warning)) {
             $warning = '<div class="warning"><h3>Database status</h3><ul>' . $warning . '</ul></div>';
         }
-        
+
         return $warning;
     }
-    
+
     function getCluster($domain)
     {
         foreach (array('sql-s1', 'sql-s2', 'sql-s3') as $cluster) {
@@ -131,7 +131,7 @@ class TSDatabase
             }
         }
     }
-    
+
     function getDatabase($domain)
     {
         foreach (array('sql-s1', 'sql-s2', 'sql-s3') as $cluster) {
@@ -145,7 +145,7 @@ class TSDatabase
             }
         }
     }
-    
+
     function getNamespace($ns_id, $db_name)
     {
         foreach (array('sql-s1', 'sql-s2', 'sql-s3') as $cluster) {
@@ -163,7 +163,7 @@ class TSDatabase
             }
         }
     }
-    
+
     function getNamespaceID($ns_name, $db_name)
     {
         foreach (array('sql-s1', 'sql-s2', 'sql-s3') as $cluster) {
@@ -177,7 +177,7 @@ class TSDatabase
             }
         }
     }
-    
+
     function storeCategoryTree($category, $maxdepth, $db_name, $cluster)
     {
         $timestamp = date("YmdHis");
@@ -209,7 +209,7 @@ class TSDatabase
             //Delete current tree for $category
             $sql = 'DELETE FROM u_erwin85.sc_' . $db_name . ' WHERE sc_supercategory = \'' . $category . '\'';
             $q = $this->performQuery($sql, $cluster);
-        }    
+        }
         //Insert main category
         $sql = 'INSERT INTO u_erwin85.sc_' . $db_name . '
             SELECT \'\', page_id, page_title, page_title, 0, \'' . $timestamp . '\'
@@ -250,7 +250,7 @@ class TSDatabase
             if ($inserted) {
                 $sql = 'INSERT IGNORE INTO u_erwin85.sc_' . $db_name . '
                     SELECT \'\', sc_page_id, sc_supercategory, sc_category, sc_depth, sc_timestamp FROM u_erwin85.' . $temptable;
-                
+
                 $q = $this->performQuery($sql, $cluster);
                 $inserted = mysql_affected_rows($this->link[$cluster]);
 
@@ -259,7 +259,7 @@ class TSDatabase
              }
         }
     }
-    
+
     /****************************************************
     Private functions
     ****************************************************/
@@ -273,14 +273,14 @@ class TSDatabase
         } else {
             $this->status[$cluster] = array('UNKNOWN', '');
         }
-        
+
         if ($this->status[$cluster][0] == 'ERRO' || $this->status[$cluster][0] == 'DOWN') {
             $this->_dbup[$cluster] = false;
         } else {
             $this->_dbup[$cluster] = true;
         }
     }
- 
+
     private function _setAllStatus()
     {
         $s1text = file_get_contents('/var/www/status_s1');
@@ -291,11 +291,11 @@ class TSDatabase
 
         $s3text = file_get_contents('/var/www/status_s3');
         $this->_setStatus($s3text, 'sql-s3');
-        
+
         $sqltext = file_get_contents('/var/www/status_sql');
         $this->_setStatus($sqltext, 'sql');
     }
-    
+
     private function _connectHost($host)
     {
         $this->link[$host] = @mysql_connect($host, $this->_mysqlconf['user'], $this->_mysqlconf['password']);
@@ -304,7 +304,7 @@ class TSDatabase
         } else {
             $this->_dbup[$host] = false;
         }
-            
+
     }
     private function _setReplag()
     {
@@ -318,7 +318,7 @@ class TSDatabase
         } else {
             $this->_replag['sql-s1'] = array(-1, 'infinite');
         }
-        
+
         if ($this->_dbup['sql-s2']) {
             $sql = 'SELECT time_to_sec(timediff(now()+0,rev_timestamp)) FROM dewiki_p.revision ORDER BY rev_timestamp DESC LIMIT 1';
             $q = $this->performQuery($sql, 'sql-s2');
@@ -329,8 +329,8 @@ class TSDatabase
         } else {
             $this->_replag['sql-s2'] = array(-1, 'infinite');
         }
-        
-        if ($this->_dbup['sql-s3']) {        
+
+        if ($this->_dbup['sql-s3']) {
             $sql = 'SELECT time_to_sec(timediff(now()+0,rev_timestamp)) FROM frwiki_p.revision ORDER BY rev_timestamp DESC LIMIT 1';
             $q = $this->performQuery($sql, 'sql-s3');
             if ($q) {
@@ -341,7 +341,7 @@ class TSDatabase
             $this->_replag['sql-s3'] = array(-1, 'infinite');
         }
     }
-    
+
     private function _timeDiff($time)
     {
         $days = ($time - ($time % 86400))/86400;

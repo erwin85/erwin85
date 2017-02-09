@@ -42,7 +42,7 @@ $sql = 'SELECT log_timestamp, log_deleted, user_name, log_namespace, ns_name, lo
         WHERE log_type = \'delete\'
         AND log_action = \'revision\'
         ORDER BY log_timestamp DESC LIMIT 10;';
-        
+
 $q = $db->performQuery($sql, $cluster);
 if (!$q)
 {

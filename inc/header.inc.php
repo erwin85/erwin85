@@ -3,7 +3,7 @@
 <head>
     <title><?=$title;?> - erwin85</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="//bits.wikimedia.org/en.wikipedia.org/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.shared%7Cmediawiki.skinning.interface%7Cskins.monobook.styles&amp;only=styles&amp;skin=monobook&amp;*" rel="stylesheet" type="text/css" />
+    <link href="//en.wikipedia.org/w/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.shared%7Cmediawiki.skinning.interface%7Cskins.monobook.styles&amp;only=styles&amp;skin=monobook&amp;*" rel="stylesheet" type="text/css" />
     <link href="/erwin85/css/Tool.css" rel="stylesheet" type="text/css" />
     <?=$css;?>
     <?=$scripts;?>

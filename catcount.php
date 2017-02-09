@@ -22,25 +22,25 @@ if (!$q) {
 } else {
     if (mysql_num_rows($q) == 0 ) {
         echo '<p>Failed to get namespaces.</p>';
-    } else { 
+    } else {
         $namespaces[0] = 'Main';
         while ($row = mysql_fetch_assoc($q)) {
             $namespaces[$row['ns_id']] = $row['ns_name'];
         }
     }
 }
-    
+
 if (!empty($_SERVER['QUERY_STRING'])) {
-    
+
     // Get variables
     $category = mysql_real_escape_string($_GET['category']);
-    
+
     $include = '';
     $include_ids = '';
     $exclude = '';
     $exclude_ids = '';
     $syntax = '<!-- count:' . str_replace(' ', '_', $category) . '; ns:';
-    
+
     foreach($namespaces as $ns_id => $ns_name) {
         if (intval($_GET[$ns_id]) == 1) {
             $include_ids .= $ns_id . ',';
@@ -57,7 +57,7 @@ if (!empty($_SERVER['QUERY_STRING'])) {
         $syntax .= substr($exclude_ids, 0, -1);
         echo '<p>Count all pages in ' . $category . ' not in the ' . substr($exclude, 0, -2) . ' namespace(s).</p>';
     }
-    
+
     $syntax .= ' -->0<!-- end -->';
     echo '<p>The code to use is:</p><p><code>' . htmlspecialchars($syntax) . '</code></p>';
 } else {
@@ -65,12 +65,12 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 <form method="get">
 <table border="0"><tbody>
 <tr>
-	<td>
-		Category (without namespace):
-	</td>
-	<td>
-		<input type="text" name="category">
-	</td>
+        <td>
+                Category (without namespace):
+        </td>
+        <td>
+                <input type="text" name="category">
+        </td>
 </tr>
 <tr>
     <td colspan = "2">
@@ -82,20 +82,20 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 foreach($namespaces as $ns_id => $ns_name) {
 ?>
 <tr>
-	<td>&nbsp;</td>
-	<td>
-		<input type="checkbox" name="<?=$ns_id;?>" value="1"> (I) <input type="checkbox" name="<?=$ns_id;?>" value="-1"> (E) <?=$ns_name;?>
-	</td>
+        <td>&nbsp;</td>
+        <td>
+                <input type="checkbox" name="<?=$ns_id;?>" value="1"> (I) <input type="checkbox" name="<?=$ns_id;?>" value="-1"> (E) <?=$ns_name;?>
+        </td>
 </tr>
 <?php
 }
 ?>
 <tr>
-	<td>&nbsp;</td>
-	<td>
-		<input type="submit" value="Submit" name="submit">
-	</td>
-	<td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>
+                <input type="submit" value="Submit" name="submit">
+        </td>
+        <td>&nbsp;</td>
 </tr></tbody></table></form>
 <?php
 }

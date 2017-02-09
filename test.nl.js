@@ -6,15 +6,15 @@
  *
  */
  function protectionTemplates() {
-    var content = document.getElementById('content');   
+    var content = document.getElementById('content');
     if (content == null || document.getElementsByTagName('h1')[0] == null) {
         // There is no 'content' element and/or no h1 element.
         return false;
     }
-    
+
     // The most restricting level of restriction (edit or move) on the current page.
     var restrictionLevel = null;
-    
+
     // Get restriction level.
     if ((wgRestrictionEdit[0] != null && wgRestrictionEdit[0] == 'sysop')
             || (wgRestrictionMove[0] != null && wgRestrictionMove[0] == 'sysop')) {
@@ -25,13 +25,13 @@
         // Editing and/or moving the page is limited to autoconfirmed users.
         restrictionLevel = 'autoconfirmed';
     }
-    
+
     if (restrictionLevel == null) {
         // Nothing to do. So quit.
-        return false;   
+        return false;
     }
-    
-    
+
+
     // Set template title and node id.
     if (restrictionLevel == 'sysop') {
         var templateTitle = 'Gebruiker:Erwin/Klad4';
@@ -42,7 +42,7 @@
     }
 
     // Get template from API.
-    var request = sajax_init_object ();      
+    var request = sajax_init_object ();
     request.open('GET', wgServer + wgScriptPath + '/api.php?format=json&action=parse&text={{' + templateTitle + '}}&title=' + wgTitle, true);
     request.onreadystatechange =
     function () {
@@ -53,7 +53,7 @@
                 var divContent = json.parse.text['*'];
             }
         }
-        
+
         if (divContent != null) {
             // We retrieved the template, so add it to the page.
             var divNode = document.createElement('div');
@@ -65,9 +65,8 @@
     };
     request.setRequestHeader ('Pragma', 'cache=yes');
     request.setRequestHeader ('Cache-Control', 'no-transform');
-    request.send (null); 
+    request.send (null);
 }
 
 addOnloadHook(protectionTemplates);
 // </source>
-

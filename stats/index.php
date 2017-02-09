@@ -29,7 +29,7 @@ foreach ($results['query']['pages'] as $page) {
     }
 }
 ?>
-<!DOCTYPE html 
+<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -88,11 +88,11 @@ while ($row = mysql_fetch_assoc($q))
 {
     echo '<tr><td>' . $row['user'] . '</td><td>' . $row['total'] . '</td><td>' . $row['month'] . '</td><td>' . $row['week'] . '</td><td>' . $row['day'] . '</td></tr>';
 }
-                
-?>   
+
+?>
 </table>
 <div class='footer'>
-	<p><a href="http://toolserver.org"><img class='footer' src='/wikimedia-toolserver-button.png' alt='Wikimedia Toolserver' /></a></p>
+        <p><a href="http://toolserver.org"><img class='footer' src='/wikimedia-toolserver-button.png' alt='Wikimedia Toolserver' /></a></p>
 </div>
 </body>
 </html>

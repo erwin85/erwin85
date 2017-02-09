@@ -19,7 +19,7 @@ if (count($counts) > 200) {
     $twidth = 5;
 }
 
-// Dataset definition 
+// Dataset definition
 $DataSet = new pData;
 $DataSet->AddPoint($counts,  'Serie1');
 $DataSet->AddAllSeries();
@@ -38,8 +38,8 @@ $Test->drawGraphArea(255, 255, 255, TRUE);
 $Test->drawScale($DataSet->GetData(), $DataSet->GetDataDescription(), ($log ? SCALE_LOG : SCALE_NORMAL), 150, 150, 150, TRUE, 0, 2, $WithMargin=FALSE,$SkipLabels=$twidth, False);
 $Test->drawGrid(4, TRUE, 230, 230, 230, 50, $twidth);
 $Test->setLineStyle(2);
-$Test->drawLineGraph($DataSet->GetData(),$DataSet->GetDataDescription());     
-$Test->drawPlotGraph($DataSet->GetData(),$DataSet->GetDataDescription(),3,2,255,255,255);     
+$Test->drawLineGraph($DataSet->GetData(),$DataSet->GetDataDescription());
+$Test->drawPlotGraph($DataSet->GetData(),$DataSet->GetDataDescription(),3,2,255,255,255);
 
 // Finish the graph
 //$Test->setFontProperties('./pChart/Fonts/tahoma.ttf', 8);

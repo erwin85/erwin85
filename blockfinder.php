@@ -26,7 +26,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     $lang = mysql_real_escape_string($_GET['lang']);
     $family = mysql_real_escape_string($_GET['family']);
     $ip = mysql_real_escape_string($_GET['ip']);
-       
+
     if ($family == 'commons') {
         $domain = 'commons.wikimedia.org';
     } elseif ($family =='meta') {
@@ -40,15 +40,15 @@ if (!empty($_SERVER['QUERY_STRING']))
     if (!$ip || !$cip->isIPAddress($ip)) {
         trigger_error("Please provide a valid IP address.", E_USER_ERROR);
     }
-               
+
     $cluster = $db->getCluster($domain);
-    
+
     if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
         trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
     } else {
         $db_name = $db->getDatabase($domain);
     }
-     
+
     $iphex = $cip->toHex($ip);
 
     /*
@@ -56,7 +56,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     Blocks should not cross a /16 boundary.
     */
     $range = substr($iphex, 0, 4);
-    
+
     // Global blocks
     $odomain = $domain; //Need this domain later. Should pass domain to commentBlock.
     $domain = 'meta.wikimedia.org';
@@ -80,7 +80,7 @@ if (!empty($_SERVER['QUERY_STRING']))
 
     echo '<h3>Global blocks</h3>';
     if(mysql_num_rows($q)) {
-        echo '<ul>';   
+        echo '<ul>';
         while ($row = mysql_fetch_assoc($q))
         {
             $blockoptions = '';
@@ -94,7 +94,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     } else {
         echo '<ul><li><span style="font-style:italic">None</span></li></ul>';
     }
-    
+
     // Local blocks
     $domain = $odomain;
     // Get list of databases
@@ -103,11 +103,11 @@ if (!empty($_SERVER['QUERY_STRING']))
         $q = $db->performQuery($sql, 'any');
         if (!$q)
         {
-	        trigger_error('Database query failed.', E_USER_ERROR);
+                trigger_error('Database query failed.', E_USER_ERROR);
         }
 
         $itotalwikis = mysql_num_rows($q); //Anzahl durchsuchende Projekte
-        
+
         while ($row = mysql_fetch_assoc($q)) {
             $adbname[] = $row['dbname'];
             $alang[] = $row['lang'];
@@ -142,11 +142,11 @@ if (!empty($_SERVER['QUERY_STRING']))
         $cluster = $acluster[$key];
         $domain = preg_replace ( '/^http:\/\//' , '' , $adomain[$key]);
         $domain_url = preg_replace ( '/^http:\/\//' , 'https://' , $adomain[$key]);
-    
+
         $procent = 100 / $itotalwikis * $progress;
         echo"<script type=\"text/javascript\">updateProgress(\"".round($procent)." %\", \"(".$domain.")\",\"".round($procent)."\"); </script>\n";
         $progress += 1;
-        
+
         $sql = 'SELECT ipb_address, user_name, ipb_reason, ipb_timestamp, ipb_auto, ipb_anon_only, ipb_create_account, ipb_expiry, ipb_range_start, ipb_range_end, ipb_enable_autoblock, ipb_block_email
                 FROM ' . $db_name . '.ipblocks
                 LEFT JOIN ' . $db_name . '.user
@@ -160,16 +160,16 @@ if (!empty($_SERVER['QUERY_STRING']))
                       )
                 ORDER BY ipb_timestamp ASC;';
         $q = $db->performQuery($sql, $cluster);
-        
+
         //echo '<pre>' . $sql . '</pre>';
         if (!$q) {
             //trigger_error('Database query failed.', E_USER_NOTICE);
             continue;
         }
-        
+
         if(mysql_num_rows($q)) {
             echo '<h4>' . $domain . '</h4>';
-            echo '<ul>' . "\n";   
+            echo '<ul>' . "\n";
             while ($row = mysql_fetch_assoc($q))
             {
                 $blockoptions = '';

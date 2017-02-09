@@ -8,11 +8,11 @@ function getPage($pagename, $forcelive=False)
         curl_close($ch);
     } else {
         $ch = curl_init('http://meta.wikimedia.org/w/index.php?title=' . urlencode($pagename) . '&action=raw&ctype=text');
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, True);
-	    curl_setopt($ch, CURLOPT_USERAGENT, 'Wikipedia Bot - http://toolserver.org/~erwin85');
-	    $output = curl_exec($ch);
-	    curl_close($ch);
-    }    
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, True);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Wikipedia Bot - http://toolserver.org/~erwin85');
+            $output = curl_exec($ch);
+            curl_close($ch);
+    }
     return $output;
 }
 
@@ -50,7 +50,7 @@ function anchorencode($text) {
     $a = str_replace( '.3A', ':', $a );
     return $a;
 }
-        
+
 //Set page variables needed for errorhandler
 $title = 'steward requests';
 $pagetitle = 'steward requests';
@@ -76,8 +76,8 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
 } else {
     // Start output buffering to regenerate chache
     ob_start();
-    
-    $forcelive = mysql_real_escape_string($_GET['forcelive']);    
+
+    $forcelive = mysql_real_escape_string($_GET['forcelive']);
     $forcelive = ($forcelive ? True : False);
 
     $domain = 'meta.wikimedia.org';
@@ -104,11 +104,11 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
         $aOldest = array(time(), '');
         $aUsers = array();
         $aRequests = array();
-        
+
         if (!$content) {
             trigger_error('Could not get [[' . $page . ']].', E_USER_WARNING);
         }
-        
+
         $offset = (strpos($content, '<!-- bof -->') ? strpos($content, '<!-- bof -->') : 0);
 
         $requests = preg_split('/\={' . $page['level'] . '}(.*?)\={' . $page['level'] . '}/', substr($content, $offset), 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
@@ -121,13 +121,13 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
             $info = array();
 
             // Ignore closed requests;
-            if (preg_match('/\{\{[Cc]losed(?:\||\}\})/', $text) 
+            if (preg_match('/\{\{[Cc]losed(?:\||\}\})/', $text)
                 || preg_match('/\s*?\|status\s*?=\s*?[Dd]one/', $text)
                 || preg_match('/\s*?\|status\s*?=\s*?[Nn]ot done/', $text)
                 || preg_match('/\{\{[Ss]tatus\|(?:[Dd]one|[Nn]ot done)(?:\||\}\})/', $text)) {
                 $info['status'] = 'Closed';
             }
-                   
+
             // Find timestamps
             $timestamps = array();
             preg_match_all('/\d{2}:\d{2}, \d{1,2} .*? \d{4} \(UTC\)/', $text, $matches);
@@ -136,19 +136,19 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
             }
 
             sort($timestamps);
-            
+
             // If no timestamp is found it's probably an example.
             if ($timestamps[0] == 0) {
                 $info['status'] = 'Ignored';
             }
-            
+
             if ($timestamps[0] < $aOldest[0] && !isset($info['status'])) {
                 $aOldest = array($timestamps[0], $title);
             }
-            
+
             $info['t_old'] = strftime('%H:%M, %e %B %Y', $timestamps[0]);
             $info['t_new'] = strftime('%H:%M, %e %B %Y', $timestamps[count($timestamps)-1]);
-            
+
             // Find users
             $users = array();
             preg_match_all('/\[\[([Uu]ser:|Special:Contributions\/)(?P<user>[^\|\]]*?)\|[^\]]*?\]\]/', $text, $matches);
@@ -165,7 +165,7 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
                 }
             }
             $info['users'] = $users;
-            
+
             // Update number of unhandled requests.
             if (!isset($info['status'])) {
                 $iOpen++;
@@ -176,13 +176,13 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
                     $info['status'] = 'Handled';
                 }
             }
-            
+
             // Add array to main array
             $aRequests[$title] = $info;
         }
-        
+
         // Show statistics
-        
+
         $sql = 'SELECT user_name
                 FROM metawiki_p.revision
                 JOIN metawiki_p.page
@@ -208,13 +208,13 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
             }
             $stewards = join(', ', $stewards);
         }
-           
+
         echo '<p>';
         echo 'Open requests: ' . $iOpen . ' (<b>' . $iUnhandled . ' unhandled</b>).<br />';
         echo 'Oldest open request: <i>' . $aOldest[1] . '</i> opened at <b>' . strftime('%H:%M, %e %B %Y', $aOldest[0]) . '</b>. <br />';
         echo 'Recent stewards: <i>' . $stewards . '</i>.';
         echo '</p>';
-        
+
         // List open requests
         echo '<table class="prettytable sortable" style="width: 100%">';
         echo '<tr><th style="width: 30%">Title</th><th style="width: 20%">First comment</th><th style="width: 20%">Last comment</th><th style="width: 30%">Users</th>';
@@ -238,14 +238,14 @@ if (file_exists($cacheFile) && !$_GET['action'] == 'purge') {
         echo '</table>';
     }
 
-    // Save results to cache    
+    // Save results to cache
     $f = fopen($cacheFile, 'w');
     fwrite($f, ob_get_contents());
     fclose($f);
 
     // Send the output to the browser
     ob_end_flush();
-        
+
 }
 require_once 'inc/footer.inc.php';
 ?>

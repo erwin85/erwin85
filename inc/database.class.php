@@ -10,17 +10,17 @@ class TSDatabase
     s4: commons
     s5: dewiki
     s6: fr/ja/ruwiki
-    
+
     sql-toolserver: toolserver
     sql: user databases
-    
+
     Distinct servers:
     s1, s2+s5, s3+s4+s6, sql, sql-toolserver
-    
+
     Commons is available on all 3 servers.
     */
     private static $instance;
-    
+
     public $link = array();
     public $status = array();
     private $_randServer = 's3.labsdb';
@@ -30,16 +30,16 @@ class TSDatabase
     private $_mysqlconf;
 
     public function __clone() {}
-      
+
     private function __construct()
     {
         $this->_setAllStatus();
         $this->_mysqlconf = parse_ini_file('/data/project/erwin85/replica.my.cnf');
         $this->_randServer = $this->_getRandServer();
         $this->_connectHost($this->_randServer); // Need a connection for mysql_real_escape_string
-        
+
     }
-    
+
     public static function singleton()
     {
         if (!isset(self::$instance)) {
@@ -49,7 +49,7 @@ class TSDatabase
 
         return self::$instance;
     }
-    
+
     function __destruct()
     {
         foreach($this->_servers as $s) {
@@ -58,28 +58,28 @@ class TSDatabase
             }
         }
     }
-    
+
     /****************************************************
     Public functions
     ****************************************************/
     function performQuery($sql, $server = 'any')
     {
-	// Add time limit to query.
-//	$sql = '/* LIMIT:60 NM*/ ' . $sql;// Not used on Labs
+        // Add time limit to query.
+//      $sql = '/* LIMIT:60 NM*/ ' . $sql;// Not used on Labs
 
         // Query can be performed on any server.
         if ($server == 'any') {
 //            $server = 'toolsdb'; // Try 2015-07-31
-		$server = 'enwiki.labsdb' ;
+                $server = 'enwiki.labsdb' ;
 //            $server = $this->_randServer; // Not used on Labs
         }
 
-	// Connect to host if necessary.
+        // Connect to host if necessary.
         if (!isset($this->_dbconn[$server])) {
             $this->_connectHost($server);
         }
-        
-	// Run query.
+
+        // Run query.
         if ($this->_dbconn[$server] === True) {
             $link = $this->link[$server];
             $q = mysql_query($sql, $link);
@@ -88,29 +88,29 @@ class TSDatabase
         } else {
             return False;
         }
-        
+
     }
-    
+
     //Backwards compatibility
     function performUserQuery($sql)
     {
         return $this->performQuery($sql, $server = 'sql');
-        
+
     }
-    
+
     function getReplag($server, $machine = False)
     {
         if (!array_key_exists($server, $this->_replag)) {
             $this->_setReplag();
         }
-        
+
         if ($machine) {
             return $this->_replag[$server][0];
         } else {
             return $this->_replag[$server][1];
         }
     }
-     
+
     function getAllReplag($machine = False)
     {
         $replag = array();
@@ -121,11 +121,11 @@ class TSDatabase
         }
         return $replag;
     }
-            
+
     function getWarning()
     {
         $warning = '';
-/*        
+/*
         foreach ($this->_servers as $s) {
             if ($this->status[$s][0] == 'ERRO' || $this->status[$s][0] == 'DOWN') {
                 $class = 'erro';
@@ -134,17 +134,17 @@ class TSDatabase
                 $warning .= '<li ' . ($class ? ' class="' . $class . '"' : '') . '>Cluster ' . $s . ': ' . $this->status[$s][0] . ' - ' . $this->status[$s][1] . '</li>';
             }
         }
-        
+
         if (!empty($warning)) {
             $warning = '<h3>Database status:</h3><ul>' . $warning . '</ul>';
         }
-*/     
+*/
         if (file_exists('/var/www/sitenotice')) {
             $notice = file_get_contents('/var/www/sitenotice');
         }
-        
+
         $notice = (!empty($notice) ? '<h3>Notification:</h3>' . $notice : '');
-        
+
         if (!empty($warning) || !empty($notice)) {
             return '<div class="warning">' . $warning . $notice . '</div>';
         } else {
@@ -197,23 +197,23 @@ function getDBname ( $language , $project ) {
 */
 
     function domain2dbname ( $domain ) {
-	$ret = $domain ;
-    	$ret = preg_replace ( '/^http:\/\//' , '' , $ret ) ;
-    	$ret = preg_replace ( '/\.org$/' , '' , $ret ) ;
-    	$ret = preg_replace ( '/wikipedia$/' , 'wiki' , $ret ) ;
-    	$ret = preg_replace ( '/wikimedia$/' , 'wiki' , $ret ) ;
-    	$ret = preg_replace ( '/\./' , '' , $ret ) ;
-    	return $ret ;
+        $ret = $domain ;
+        $ret = preg_replace ( '/^http:\/\//' , '' , $ret ) ;
+        $ret = preg_replace ( '/\.org$/' , '' , $ret ) ;
+        $ret = preg_replace ( '/wikipedia$/' , 'wiki' , $ret ) ;
+        $ret = preg_replace ( '/wikimedia$/' , 'wiki' , $ret ) ;
+        $ret = preg_replace ( '/\./' , '' , $ret ) ;
+        return $ret ;
     }
-      
+
     function getCluster($domain)
     {
 /*
-    	$ret = $this->domain2dbname ( $domain ) ;
-    	$ret .= '.labsdb' ;
+        $ret = $this->domain2dbname ( $domain ) ;
+        $ret .= '.labsdb' ;
         return $ret ;
 */
-        $sql = "SELECT slice FROM meta_p.wiki WHERE url LIKE '%" . $domain . "'";
+        $sql = "SELECT slice FROM meta_p.wiki WHERE url = 'https://" . $domain . "'";
         $q = $this->performQuery($sql, $server = 'any');
         if ($q) {
             $result = mysql_fetch_assoc($q);
@@ -235,22 +235,22 @@ function getDBname ( $language , $project ) {
 
     function getDababaseByFamilyAndLanguage($language, $family) {
     }
-    
+
     function getDatabase($domain)
     {
 /*
-    	$ret = $this->domain2dbname ( $domain ) ;
-    	$ret .= '_p' ;
-    	return $ret ;
+        $ret = $this->domain2dbname ( $domain ) ;
+        $ret .= '_p' ;
+        return $ret ;
 */
-        $sql = "SELECT dbname FROM meta_p.wiki WHERE url LIKE '%" . $domain . "'";
+        $sql = "SELECT dbname FROM meta_p.wiki WHERE url = 'https://" . $domain . "'";
         $q = $this->performQuery($sql, $server = 'any');
         if ($q) {
             $result = mysql_fetch_assoc($q);
             return $result['dbname'].'_p';
         }
     }
-    
+
     function getDomain($dbname)
     {
         $db = $dbname;
@@ -262,20 +262,20 @@ function getDBname ( $language , $project ) {
             return preg_replace ('/^http:\/\/', '', $result['url']);
         }
     }
-    
-    
+
+
     function getNamespace($ns_id, $db_name)
     {
-		$fh = popen ( "grep '$db_name' namespaces.tab | grep $ns_id" , 'r' ) ;
-		while ( !feof($fh) ) {
-			$s = fgets ( $fh ) ;
-			$s = explode ( "\t" , $s ) ; // dbname , org, id , local_name
-			if ( $s[0] != $db_name ) continue ;
-			if ( $s[2] != $ns_id ) continue ;
-			pclose ( $fh ) ;
-			return trim($s[3]) ;
-		}
-		pclose ( $fh ) ;
+                $fh = popen ( "grep '$db_name' namespaces.tab | grep $ns_id" , 'r' ) ;
+                while ( !feof($fh) ) {
+                        $s = fgets ( $fh ) ;
+                        $s = explode ( "\t" , $s ) ; // dbname , org, id , local_name
+                        if ( $s[0] != $db_name ) continue ;
+                        if ( $s[2] != $ns_id ) continue ;
+                        pclose ( $fh ) ;
+                        return trim($s[3]) ;
+                }
+                pclose ( $fh ) ;
 
 /*
         $sql = "SELECT ns_name FROM toolserver.namespace WHERE dbname = '" . $db_name . "' AND ns_id = " . $ns_id;
@@ -290,19 +290,19 @@ function getDBname ( $language , $project ) {
         }
 */
     }
-    
+
     function getNamespaceID($ns_name, $db_name)
     {
-		$fh = popen ( "grep '$db_name' namespaces.tab" , 'r' ) ;
-		while ( !feof($fh) ) {
-			$s = fgets ( $fh ) ;
-			$s = explode ( "\t" , $s ) ; // dbname , org, id , local_name
-			if ( $s[0] != $db_name ) continue ;
-			if ( $s[3] != $ns_name ) continue ;
-			pclose ( $fh ) ;
-			return $s[2] ;
-		}
-		pclose ( $fh ) ;
+                $fh = popen ( "grep '$db_name' namespaces.tab" , 'r' ) ;
+                while ( !feof($fh) ) {
+                        $s = fgets ( $fh ) ;
+                        $s = explode ( "\t" , $s ) ; // dbname , org, id , local_name
+                        if ( $s[0] != $db_name ) continue ;
+                        if ( $s[3] != $ns_name ) continue ;
+                        pclose ( $fh ) ;
+                        return $s[2] ;
+                }
+                pclose ( $fh ) ;
 /*
         $sql = "SELECT ns_id FROM toolserver.namespace WHERE dbname = '" . $db_name . "' AND ns_name = '" . $ns_name . "'";
         $q = $this->performQuery($sql, $server = 'any');
@@ -312,7 +312,7 @@ function getDBname ( $language , $project ) {
         }
 */
     }
-    
+
     function storeCategoryTree($category, $maxdepth, $db_name, $server)
     {
         $timestamp = date("YmdHis");
@@ -344,7 +344,7 @@ function getDBname ( $language , $project ) {
             //Delete current tree for $category
             $sql = 'DELETE FROM s51362__erwin85.sc_' . $db_name . ' WHERE sc_supercategory = \'' . $category . '\'';
             $q = $this->performQuery($sql, $server);
-        }    
+        }
         //Insert main category
         $sql = 'INSERT INTO s51362__erwin85.sc_' . $db_name . '
             SELECT \'\', page_id, page_title, page_title, 0, \'' . $timestamp . '\'
@@ -385,7 +385,7 @@ function getDBname ( $language , $project ) {
             if ($inserted) {
                 $sql = 'INSERT IGNORE INTO s51362__erwin85.sc_' . $db_name . '
                     SELECT \'\', sc_page_id, sc_supercategory, sc_category, sc_depth, sc_timestamp FROM s51362__erwin85.' . $temptable;
-                
+
                 $q = $this->performQuery($sql, $server);
                 $inserted = mysql_affected_rows($this->link[$server]);
 
@@ -394,7 +394,7 @@ function getDBname ( $language , $project ) {
              }
         }
     }
-    
+
     /****************************************************
     Private functions
     ****************************************************/
@@ -408,14 +408,14 @@ function getDBname ( $language , $project ) {
         } else {
             $this->status[$server] = array('UNKNOWN', '');
         }
-        
+
         if ($this->status[$server][0] == 'ERRO' || $this->status[$server][0] == 'DOWN') {
             $this->_dbup[$server] = False;
         } else {
             $this->_dbup[$server] = True;
         }
     }
-    
+
     private function _setAllStatus()
     {
         foreach ($this->_servers as $s) {
@@ -424,7 +424,7 @@ function getDBname ( $language , $project ) {
             } else {
                 $f = '/var/www/status_sql';
             }
-            
+
             if (file_exists($f)) {
                 $status = $this->_determineStatus($f);
                 $this->_setStatus($status, $s);
@@ -436,20 +436,20 @@ function getDBname ( $language , $project ) {
 
     private function _determineStatus($file) {
         $content = file($file);
-	// Find first line not starting with '#'
-	foreach ($content as $line) {
-	    if (substr($line, 0, 1) != '#') {
+        // Find first line not starting with '#'
+        foreach ($content as $line) {
+            if (substr($line, 0, 1) != '#') {
                 return $line;
-	    }
-	}
-	// Return blank.
-	return "";
+            }
+        }
+        // Return blank.
+        return "";
     }
-    
+
     private function _getRandServer()
     {
-    	return 'enwiki.labsdb' ;
-/*    
+        return 'enwiki.labsdb' ;
+/*
         $servers = $this->_servers;
         while (count($servers) > 0) {
             $randKey = array_rand($servers);
@@ -471,12 +471,12 @@ function getDBname ( $language , $project ) {
         } else {
             $this->_dbconn[$host] = False;
         }
-            
+
     }
     private function _setReplag()
     {
-	// No longer get replag.
-	return;
+        // No longer get replag.
+        return;
 
         foreach ($this->_servers as $s) {
             if ($s != 'sql') {
@@ -501,7 +501,7 @@ function getDBname ( $language , $project ) {
                         $dbname = 'frwiki_p';
                         break;
                 }
-                
+
                 if (isset($dbname)) {
                     $sql = 'SELECT time_to_sec(timediff(now()+0,rev_timestamp)) FROM ' . $dbname . '.revision ORDER BY rev_timestamp DESC LIMIT 1';
                     $q = $this->performQuery($sql, $s);
@@ -510,12 +510,12 @@ function getDBname ( $language , $project ) {
                         $r = array($result[0], $this->_timeDiff($result[0]));
                     }
                 }
-                
+
                 $this->_replag[$s] = (isset($r) ? $r : array(-1, 'infinite'));
             }
         }
     }
-    
+
     private function _timeDiff($time)
     {
         $days = ($time - ($time % 86400))/86400;
