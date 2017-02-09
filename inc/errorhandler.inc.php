@@ -101,6 +101,8 @@ function ErrorHandler($errno, $errstr, $errfile, $errline,  $errcontext)
 }
 
 if (error_reporting() != 0) {
-    set_error_handler('ErrorHandler');
+    # Added ", error_reporting() & ~E_DEPRECATED" as a temporary
+    # workaround for T140421.                      -- scfc, 2017-02-09
+    set_error_handler('ErrorHandler', error_reporting() & ~E_DEPRECATED);
 }    
 ?>
