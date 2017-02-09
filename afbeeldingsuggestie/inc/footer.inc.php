@@ -30,7 +30,7 @@
                 <div class="pBody">
                                 <ul>
                                     <li><a href="http://jira.toolserver.org/browse/ERWIN" title="Bug report">Bug report</a></li>
-                                    <li><a href="http://fisheye.toolserver.org/browse/erwin85" title="SVN repository">SVN repository</a></li>
+                                    <li><a href="https://github.com/erwin85/erwin85" title="Git repository">Git repository</a></li>
                     </ul>
                 </div>
             </div>

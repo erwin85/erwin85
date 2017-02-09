@@ -45,7 +45,7 @@
                 <div class="pBody">
                                 <ul>
                                     <li><a href="https://phabricator.wikimedia.org/maniphest/task/create/?projects=PHID-PROJ-u4jpbumungrb2teoggra" title="Bug report">Bug report</a></li>
-                                    <li><a href="http://fisheye.toolserver.org/browse/erwin85" title="SVN repository">SVN repository</a></li>
+                                    <li><a href="https://github.com/erwin85/erwin85" title="Git repository">Git repository</a></li>
                     </ul>
                 </div>
             </div>
