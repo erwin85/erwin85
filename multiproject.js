@@ -6,7 +6,7 @@ function stopnow()//protect database for overload
     if(alreadyload == false)
     {
         var hasstopped = false;
-      
+
         if(self.stop) {
             stop();
             hasstopped = true;
@@ -14,7 +14,7 @@ function stopnow()//protect database for overload
             document.execCommand('Stop'); //IE-Hack
             hasstopped = true;
         }
-        
+
         alreadyload = true;
 
         if(hasstopped == true)

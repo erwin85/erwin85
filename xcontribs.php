@@ -23,11 +23,11 @@ if (!empty($_SERVER['QUERY_STRING']))
 {
     $user = ucfirst(mysql_real_escape_string(trim($_GET['user'])));
     $user = str_replace('_', ' ', $user);
-    
+
     if ( $_GET['logs'] ) {
-	$including_log = ' (including logs)';
+        $including_log = ' (including logs)';
     } else {
-	$including_log = '';
+        $including_log = '';
     }
 
     $sql = 'SELECT dbname, lang, family, url, slice FROM meta_p.wiki where is_closed = 0;';
@@ -40,7 +40,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     $itotalwikis = mysql_num_rows($q);
 
     $projects = array();
-        
+
     while ($row = mysql_fetch_assoc($q)) {
         $projects[$row['dbname']] = $row;
     }
@@ -48,11 +48,11 @@ if (!empty($_SERVER['QUERY_STRING']))
     foreach($projects as $dbname => $project) {
         $cluster = $project['slice'];
         $domain = $project['url'];
-        
+
         $sql = 'SELECT user_editcount, user_id
                 FROM ' . $dbname . '_p.user
                 WHERE user_name = \'' . $user . '\';';
-                   
+
         $q = $db->performQuery($sql, $cluster);
         if (!$q)
         {
@@ -61,34 +61,34 @@ if (!empty($_SERVER['QUERY_STRING']))
 
         if (mysql_num_rows($q) > 0) {
             $row = mysql_fetch_assoc($q);
-            
+
             if ($row['user_editcount'] > 0) {
-		if ( $_GET['logs'] ) {
-			$log_count = 0;
-			$sql = 'SELECT count(log_id) as log_count
-				FROM ' . $dbname . '_p.logging_userindex
-				WHERE log_user = \''. $row['user_id'] . '\';';
-			$q2 = $db->performQuery($sql);
+                if ( $_GET['logs'] ) {
+                        $log_count = 0;
+                        $sql = 'SELECT count(log_id) as log_count
+                                FROM ' . $dbname . '_p.logging_userindex
+                                WHERE log_user = \''. $row['user_id'] . '\';';
+                        $q2 = $db->performQuery($sql);
 
-			if ($q2) {
-				if (mysql_num_rows($q2) > 0) {
-					$logs = mysql_fetch_assoc($q2);
-					$counts[] = $row['user_editcount'] + $logs['log_count'];
-				}
-			}
+                        if ($q2) {
+                                if (mysql_num_rows($q2) > 0) {
+                                        $logs = mysql_fetch_assoc($q2);
+                                        $counts[] = $row['user_editcount'] + $logs['log_count'];
+                                }
+                        }
 
-		} else {
-			$counts[] = $row['user_editcount'];
-		}
+                } else {
+                        $counts[] = $row['user_editcount'];
+                }
             }
         }
     }
 
-	$avg = array_sum($counts)/count($counts);
+        $avg = array_sum($counts)/count($counts);
     if (count($counts) > 1) {
         // Statistics
         sort($counts);
-        
+
         // Number of projects with at least X edits.
         $mcounts = array(5, 10, 25, 50, 100, 1000, 10000);
         $totals = array();
@@ -101,26 +101,26 @@ if (!empty($_SERVER['QUERY_STRING']))
             if ($i > 0) {
                 $totals[$o] = $i;
             }
-	}
+        }
 
-	#rsort($counts);
-	#$sigma = 0.0;
-	$Ts = 0.0;
-	$i = 1;
-	$N = count($counts);
-	foreach ($counts as $c) {
-		#$sigma += $i * $c;
-		#$i += 1;
-		$Ts += ( $c / $avg)  * log( $c / $avg );
-	}
-	# http://www.fao.org/docs/up/easypol/329/gini_index_040en.pdf
-	# $gini = 1 + 1 / $N - 2 * $sigma / ( $N * array_sum($counts) );
-	# Theil index is more realistic for our case
-	$theil = $Ts / ( $N * log($N) ) ;
+        #rsort($counts);
+        #$sigma = 0.0;
+        $Ts = 0.0;
+        $i = 1;
+        $N = count($counts);
+        foreach ($counts as $c) {
+                #$sigma += $i * $c;
+                #$i += 1;
+                $Ts += ( $c / $avg)  * log( $c / $avg );
+        }
+        # http://www.fao.org/docs/up/easypol/329/gini_index_040en.pdf
+        # $gini = 1 + 1 / $N - 2 * $sigma / ( $N * array_sum($counts) );
+        # Theil index is more realistic for our case
+        $theil = $Ts / ( $N * log($N) ) ;
         ?>
 <table class="stats">
 <tbody>
-<tr><th>Username</th><td colspan="2"><a href="//tools.wmflabs.org/quentinv57-tools/tools/sulinfo.php?username=<?=$user;?>" title="SULutil"><?=$user;?></a></td></tr>	
+<tr><th>Username</th><td colspan="2"><a href="//tools.wmflabs.org/quentinv57-tools/tools/sulinfo.php?username=<?=$user;?>" title="SULutil"><?=$user;?></a></td></tr>
 <tr><th>Home wiki</th><td colspan="2"><?=max($counts);?> (<?=round(100 * max($counts) / array_sum($counts));?>%)</td></tr>
 <tr><th>Average</th><td colspan="2"><?=round($avg, 2);?></td></tr>
 <tr><th>Sum</th><td colspan="2"><?=array_sum($counts);?></td></tr>

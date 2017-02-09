@@ -12,14 +12,14 @@ function getPage($pagename, $forcelive=False)
         curl_setopt($ch, CURLOPT_USERAGENT, 'Wikipedia Bot - xwiki - http://toolserver.org/~erwin85/xwiki.php');
         $output = curl_exec($ch);
         curl_close($ch);
-    }    
+    }
     return $output;
 }
 
 function formatRow($row, $inreport, $title, $domain, $wiki)
 {
     // Get global rights
-    global $db; 
+    global $db;
     if ($row['rev_user']) {
         $sql = 'SELECT GROUP_CONCAT(gug_group SEPARATOR \', \') AS grights
                 FROM centralauth_p.localuser
@@ -70,7 +70,7 @@ if (!empty($_SERVER['QUERY_STRING']))
 {
     $report = mysql_real_escape_string($_GET['report']);
     $limit = mysql_real_escape_string($_GET['limit']);
-    $forcelive = mysql_real_escape_string($_GET['forcelive']);    
+    $forcelive = mysql_real_escape_string($_GET['forcelive']);
     $forcelive = ($forcelive ? $forcelive : 0);
     if (!$report) {
         trigger_error('Please enter the report name.', E_USER_ERROR);
@@ -86,7 +86,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     } else {
         $limit = 10;
     }
-       
+
     if (substr($report, 0, 18) == 'User:COIBot/XWiki/') {
         $spamdomain = substr($report, 18);
     } elseif (substr($report, 0, 18) == 'User:COIBot/Local/') {
@@ -100,7 +100,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     }
 
     $remspam = '*.' . $spamdomain;
-    
+
     $parts = explode('.',$spamdomain);
     $len = count($parts);
     switch($len) {
@@ -122,10 +122,10 @@ if (!empty($_SERVER['QUERY_STRING']))
     } else {
         $contents = getPage($report);
     }
-    
+
     $iprojects = 0;
     $ilinks = 0;
-    
+
     if (!$contents) {
         trigger_error('Could not get report. Are you sure the page exists?', E_USER_ERROR);
     }
@@ -153,9 +153,9 @@ if (!empty($_SERVER['QUERY_STRING']))
         $domain = $match['domain'];
         $db_name = $db->getDatabase($domain);
         $cluster = $db->getCluster($domain);
-        
+
         $revid = (!empty($match['diff']) ? $match['diff'] : $match['oldid']);
-        
+
         $sql = 'SELECT page_id, page_namespace, ns_name, page_title FROM ' . $db_name . '.revision
         LEFT JOIN ' . $db_name . '.page
         ON page_id = rev_page
@@ -174,16 +174,16 @@ if (!empty($_SERVER['QUERY_STRING']))
             //echo $sql;
             //echo mysql_error($db->link[$cluster]);
         }
-        
+
         $result = mysql_fetch_assoc($q);
-        
+
         if($result['page_title']) {
-        
+
             $page_namespace = $result['page_namespace'];
             $page_title = $result['page_title'];
             $title = ($page_namespace ? $result['ns_name'] . ':' . $page_title : $page_title);
             $page_id = $result['page_id'];
-            
+
             $wikis[$domain][$title][] = array('match' => $match[0], 'revid' => $revid, 'page_id' => $page_id, 'page_namespace' => $page_namespace, 'page_title' => $page_title);
         }
     }
@@ -236,7 +236,7 @@ if (!empty($_SERVER['QUERY_STRING']))
                 $page = ($row['ns_name'] ? $row['ns_name'] . ':' . $row['page_title'] : $row['page_title']);
                 $lpages[$page] = $row['el_to'];
             }
-            
+
             echo 'There ' . ($count != 1 ? 'are <b>' . $count . '</b> links' : 'is <b>1</b> link') . ' to this domain. (' . ($count ? '<a href="javascript:showHide(\'' . $domain . '\')" id="l-' . $domain . '">Show</a> | ' : '') . '<a href="//' . $domain . '/wiki/Special:Linksearch/*.' . $spamdomain . '">Linksearch</a>)';
             //http://nl.wikipedia.org/wiki/Tristram_Shandy?linkmodified=yes&action=edit&remspam=*.tristramshandyweb.it&options=citeweb%2Cinline&usesummary=Removing%20external%20link%3A%20__LINK__%20--%20per%20%5B%5Bm%3ATalk%3ASpam%20blacklist%5D%5D
             if($count) {
@@ -276,9 +276,9 @@ if (!empty($_SERVER['QUERY_STRING']))
                 }
                 echo ")\n<ul>";
 
-                $sql = 'SELECT r1.rev_id, r1.rev_user, r1.rev_user_text, r1.rev_comment, r1.rev_timestamp, r1.rev_minor_edit, page_latest, 
+                $sql = 'SELECT r1.rev_id, r1.rev_user, r1.rev_user_text, r1.rev_comment, r1.rev_timestamp, r1.rev_minor_edit, page_latest,
                         IF(rev_user != 0, (SELECT user_editcount FROM ' . $db_name . '.user WHERE user_id = r1.rev_user), (SELECT COUNT(1) FROM ' . $db_name . '.revision AS r2 WHERE r2.rev_user_text = r1.rev_user_text)) AS editcount,
-                        IF (r1.rev_user != 0, (SELECT GROUP_CONCAT(ug_group SEPARATOR \', \') FROM ' . $db_name . '.user_groups WHERE ug_user = r1.rev_user GROUP BY ug_user), \'\') AS rights                        
+                        IF (r1.rev_user != 0, (SELECT GROUP_CONCAT(ug_group SEPARATOR \', \') FROM ' . $db_name . '.user_groups WHERE ug_user = r1.rev_user GROUP BY ug_user), \'\') AS rights
                         FROM ' . $db_name . '.revision AS r1
                         LEFT JOIN ' . $db_name . '.page
                         on page_id = r1.rev_page
@@ -295,7 +295,7 @@ if (!empty($_SERVER['QUERY_STRING']))
                     //echo $sql;
                     //echo mysql_error($db->link[$cluster]);
                 }
-                
+
                 $xwikidiffs = array();
                 while ($row = mysql_fetch_assoc($q))
                 {
@@ -303,11 +303,11 @@ if (!empty($_SERVER['QUERY_STRING']))
                     $xwikidiffs[] = $row['rev_id'];
                     echo formatRow($row, $inreport, $title, $domain, $db_name);
                 }
-                
+
                 // Include last reported edit
                 if (!empty($xwikidiffs) && !in_array(end($diffs), $xwikidiffs)) {
                     echo '</ul><p style="font-style:italic;">Last reported diff</p><ul>';
-                    
+
                     $sql = 'SELECT r1.rev_id, r1.rev_user, r1.rev_user_text, r1.rev_comment, r1.rev_timestamp, r1.rev_minor_edit, page_latest,
                             IF(r1.rev_user != 0, (SELECT user_editcount FROM ' . $db_name . '.user WHERE user_id = r1.rev_user), (SELECT COUNT(1) FROM ' . $db_name . '.revision AS r2 WHERE r2.rev_user_text = r1.rev_user_text)) AS editcount,
                             IF (r1.rev_user != 0, (SELECT GROUP_CONCAT(ug_group SEPARATOR \', \') FROM ' . $db_name . '.user_groups WHERE ug_user = r1.rev_user GROUP BY ug_user), \'\') AS rights
@@ -323,7 +323,7 @@ if (!empty($_SERVER['QUERY_STRING']))
                         trigger_error('Database query failed.', E_USER_NOTICE);
                         continue;
                     }
-                    
+
                     while ($row = mysql_fetch_assoc($q))
                     {
                         $inreport = (in_array($row['rev_id'], $diffs));
@@ -335,9 +335,9 @@ if (!empty($_SERVER['QUERY_STRING']))
             echo '</ul>';
         }
     }
-    
+
     echo '<hr />';
-    
+
     if ($ilinks) {
         $nolinks = 'There ' . ($ilinks != 1 ? 'are ' . $ilinks . ' links' : 'is 1 link') . ' on ' . ($iprojects != 1 ? $iprojects . ' projects' : '1 project') . '.';
     } else {
@@ -348,7 +348,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     echo '<script type="text/javascript">noLinks("' . $nolinks . '");</script>';
     $executiontime =  time() - $_SERVER['REQUEST_TIME'];
     echo '<p style="font-size:80%;">Execution time: ' . $executiontime . ' seconds.</p>';
-        
+
     // Begin database crap
 } else {
 ?>

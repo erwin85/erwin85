@@ -29,21 +29,21 @@ if (!empty($_SERVER['QUERY_STRING'])) {
             case 'commons':
                 $domain = 'commons.wikimedia.org';
                 break;
-	        case 'meta':
-        		$domain = 'meta.wikimedia.org';
-        		break;
+                case 'meta':
+                        $domain = 'meta.wikimedia.org';
+                        break;
             default:
                 if ($lang) {
                     $domain = $lang . '.' . $family . '.org';
                 }
                 break;
         }
-	} elseif ($dbname) {
-	    $dbname = (substr($dbname, -2) != '_p') ? $dbname . '_p' : $dbname;
-	    $domain = $db->getDomain($dbname);
-	}
-	
-	if (!isset($domain)) {
+        } elseif ($dbname) {
+            $dbname = (substr($dbname, -2) != '_p') ? $dbname . '_p' : $dbname;
+            $domain = $db->getDomain($dbname);
+        }
+
+        if (!isset($domain)) {
         $sysops = mysql_real_escape_string($_GET['sysops']);
     } else {
         $sysops = -1;
@@ -58,11 +58,11 @@ if (!isset($domain)) {
     $q = $db->performQuery($sql, 'any');
     if (!$q)
     {
-	    trigger_error('Database query failed.', E_USER_ERROR);
+            trigger_error('Database query failed.', E_USER_ERROR);
     }
 
     $itotalwikis = mysql_num_rows($q); //Anzahl durchsuchende Projekte
-    
+
     while ($row = mysql_fetch_assoc($q)) {
         $adbname[] = $row['dbname'].'_p';
         $alang[] = $row['lang'];
@@ -100,36 +100,36 @@ do {
 <form method="get" action="<?=$_SERVER['PHP_SELF'];?>">
 <table border="0"><tbody>
 <tr>
-	<td style = "text-align: right; width:300px;">
-		Project (optional):
-	</td>
-	<td>
-		<input type="text" name="lang" style = "width: 50px">
-		<select name="family" >
-			<option value = "commons">Commons</option>
-			<option value = "meta">Meta</option>
-			<option value = "wikipedia" selected>.wikipedia.org</option>
-			<option value = "wikibooks">.wikibooks.org</option>
-			<option value = "wikisource">.wikisource.org</option>
-			<option value = "wikinews">.wikinews.org</option>
-			<option value = "wikiquote">.wikiquote.org</option>
-			<option value = "wiktionary">.wiktionary.org</option>
-		</select>
-	</td>
+        <td style = "text-align: right; width:300px;">
+                Project (optional):
+        </td>
+        <td>
+                <input type="text" name="lang" style = "width: 50px">
+                <select name="family" >
+                        <option value = "commons">Commons</option>
+                        <option value = "meta">Meta</option>
+                        <option value = "wikipedia" selected>.wikipedia.org</option>
+                        <option value = "wikibooks">.wikibooks.org</option>
+                        <option value = "wikisource">.wikisource.org</option>
+                        <option value = "wikinews">.wikinews.org</option>
+                        <option value = "wikiquote">.wikiquote.org</option>
+                        <option value = "wiktionary">.wiktionary.org</option>
+                </select>
+        </td>
 </tr>
 <tr>
-	<td style = "text-align: right; vertical-align:top" rowspan="2">
-		Maximum number of sysops<br />(-1 to include all)
-	</td>
-	<td>
-		<input name="sysops" type="text" value="<?=$sysops;?>">
-	</td>
+        <td style = "text-align: right; vertical-align:top" rowspan="2">
+                Maximum number of sysops<br />(-1 to include all)
+        </td>
+        <td>
+                <input name="sysops" type="text" value="<?=$sysops;?>">
+        </td>
 </tr>
 <tr>
-	<td>
-		<input type="submit" value="Submit" name="submit">
-	</td>
-	<td>&nbsp;</td>
+        <td>
+                <input type="submit" value="Submit" name="submit">
+        </td>
+        <td>&nbsp;</td>
 </tr></tbody></table></form>
 <br clear="all" />
 <table class="wikitable sortable">
@@ -149,15 +149,15 @@ foreach($adbname as $key => $dbname) {
         $q = $db->performQuery($sql, $cluster);
         if (!$q)
         {
-	        continue;
-	        //trigger_error('Database query failed: '.$sql . ' on ' . $cluster, E_USER_ERROR);
+                continue;
+                //trigger_error('Database query failed: '.$sql . ' on ' . $cluster, E_USER_ERROR);
         }
-        
+
         $isysop = mysql_result($q, 0, 'sysop');
         $ibureaucrat = mysql_result($q, 0, 'bureaucrat');
         $icheckuser = mysql_result($q, 0, 'checkuser');
         $ioversight = mysql_result($q, 0, 'oversight');
-        
+
         if ($isysop <= $sysops || $sysops < 0) {
             echo '<tr><td><a href="' . $domain . '">' . $domain . '</a></td><td><a href="' . $domain . '/wiki/Special:Listusers/sysop">' . $isysop . '</a></td><td><a href="' . $domain . '/wiki/Special:Listusers/bureaucrat">' . $ibureaucrat . '</a></td><td><a href="' . $domain . '/wiki/Special:Listusers/checkuser">' . $icheckuser . '</a></td><td><a href="' . $domain . '/wiki/Special:Listusers/oversight">' . $ioversight . '</a></td></tr>';
         }

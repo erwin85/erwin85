@@ -24,19 +24,19 @@
                     </ul>
                 </div>
             </div>
-            
+
             <div class="portlet" id="p-tb">
                 <h5>Toolbox</h5>
                 <div class="pBody">
-			        <ul>
-			            <li><a href="http://jira.toolserver.org/browse/ERWIN" title="Bug report">Bug report</a></li>
-			            <li><a href="http://fisheye.toolserver.org/browse/erwin85" title="SVN repository">SVN repository</a></li>
+                                <ul>
+                                    <li><a href="http://jira.toolserver.org/browse/ERWIN" title="Bug report">Bug report</a></li>
+                                    <li><a href="http://fisheye.toolserver.org/browse/erwin85" title="SVN repository">SVN repository</a></li>
                     </ul>
                 </div>
             </div>
-	
+
         </div>
-        
+
         <div id="footer">
             <div id="f-poweredbyico">
                 <a href="/"><img style = "border:0; float:left; padding: 5px;" src="http://tools.wikimedia.de/images/wikimedia-toolserver-button.png" alt="Powered by Wikimedia Toolserver" title="Powered by Wikimedia Toolserver" height="31" width="88" /></a>

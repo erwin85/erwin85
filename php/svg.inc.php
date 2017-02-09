@@ -245,7 +245,7 @@ class XML_SVG_Document extends XML_SVG_Fragment {
 
         print('<?xml version="1.0" encoding="iso-8859-1"?>'."\n");
         print('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
-	        "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">' . "\n");
+                "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">' . "\n");
 
         parent::printElement();
     }
@@ -317,12 +317,12 @@ class XML_SVG_Textpath extends XML_SVG_Element {
  * @package XML_SVG
  */
 class XML_SVG_Text extends XML_SVG_Textpath {
-	var $_text_anchor;
-	var $_dominant_baseline;
-	
+        var $_text_anchor;
+        var $_dominant_baseline;
+
     function printElement()
     {
-    	$this->printParams('text_anchor', 'dominant_baseline');
+        $this->printParams('text_anchor', 'dominant_baseline');
         parent::printElement('text');
     }
 

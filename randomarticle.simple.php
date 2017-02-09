@@ -32,13 +32,13 @@ if (!empty($_SERVER['QUERY_STRING']))
     if ($domain == 'en.wikipedia.org') {
         trigger_error('Sorry, this tool has been disabled for the English Wikipedia.', E_USER_ERROR);
     }
- */    
+ */
     if (!$categories) {
         trigger_error("Please provide a list of categories.", E_USER_ERROR);
     }
 
     $acategories = explode('|', $categories);
-    
+
     $d = $_GET['d'];
     if ($d) {
         $d = intval($d);
@@ -47,14 +47,14 @@ if (!empty($_SERVER['QUERY_STRING']))
     } else {
         $d = 10;
     }
-    
+
     $sub = $_GET['subcats'];
     if ($sub) {
         $sub = True;
     } else {
         $sub = False;
     }
-    
+
     if ($_GET['action'] == 1) {
         $url = '//tools.wmflabs.org/erwin85/randomarticle.php?lang=' . $lang . '&family=' . $family . '&categories=' . $categories . '&namespaces=' . $namespace;
         if ($sub == True) {
@@ -65,16 +65,16 @@ if (!empty($_SERVER['QUERY_STRING']))
     }
 
     $cluster = $db->getCluster($domain);
-    
+
     if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
         trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
     } else {
         $db_name = $db->getDatabase($domain);
     }
-    
+
     $allcats = array();
     $newcats = $acategories;
-    
+
     $namespacecond = ($namespace != -1 ? ' AND page_namespace ' . ($invert ? '!= ' : '= ' ) . intval($namespace) : '');
     if ($sub && count($acategories) == 1)
     {
@@ -94,24 +94,24 @@ if (!empty($_SERVER['QUERY_STRING']))
                 $renewtree = true;
             }
         }
-        
+
         if ($renewtree) {
             $db->storeCategoryTree($category, $d, $db_name, $cluster);
         }
-        $sqlsuffix = 'FROM ' . $db_name . '.page LEFT JOIN ' . $db_name . '.categorylinks ON page_id = cl_from 
-                LEFT JOIN  s51362__erwin85.sc_' . $db_name . ' ON cl_to = sc_category 
+        $sqlsuffix = 'FROM ' . $db_name . '.page LEFT JOIN ' . $db_name . '.categorylinks ON page_id = cl_from
+                LEFT JOIN  s51362__erwin85.sc_' . $db_name . ' ON cl_to = sc_category
                 WHERE page_is_redirect = 0 ' . $namespacecond . '
                 AND sc_supercategory = \'' . $category . '\'
                 AND sc_depth < ' . $d;
     } else {
-        $sqlsuffix = 'FROM ' . $db_name . '.page LEFT JOIN ' . $db_name . '.categorylinks ON page_id = cl_from 
+        $sqlsuffix = 'FROM ' . $db_name . '.page LEFT JOIN ' . $db_name . '.categorylinks ON page_id = cl_from
                 WHERE page_is_redirect = 0' . $namespacecond . '
                 AND NOT EXISTS (SELECT 1 FROM ' . $db_name . '.templatelinks
                                 WHERE tl_from = page_id
                                 AND tl_namespace = 10
                                 AND tl_title IN ("Dp", "Dpintro", "DP", "Disambig"))
                 AND cl_to IN (';
-        
+
         foreach($acategories as $category)
         {
             $sqlsuffix .= '"' . str_replace(' ', '_', $category) . '", ';
@@ -119,7 +119,7 @@ if (!empty($_SERVER['QUERY_STRING']))
 
         $sqlsuffix = substr($sqlsuffix, 0, -2) . ')';
     }
-    
+
     $sql = 'SELECT COUNT(1) AS count ' . $sqlsuffix;
     $q = $db->performQuery($sql, $cluster);
     if (!$q) {
@@ -141,7 +141,7 @@ if (!empty($_SERVER['QUERY_STRING']))
         trigger_error('Database query failed.', E_USER_ERROR);
     }
     $result = mysql_fetch_array($q, MYSQL_ASSOC);
-    
+
     if (!empty($result['page_title'])) {
         header('Location: //' . $domain . '/w/index.php?title=' . $db->getNamespace($result['page_namespace'], $db_name) . ':' . urlencode($result['page_title']));
     } else {

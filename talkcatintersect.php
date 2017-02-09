@@ -19,7 +19,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     $family = mysql_real_escape_string($_GET['family']);
     $pcategory = mysql_real_escape_string($_GET['pcategory']);
     $tpcategory = mysql_real_escape_string($_GET['tpcategory']);
-    
+
     $pcategory = str_replace(' ', '_', $pcategory);
     $tpcategory = str_replace(' ', '_', $tpcategory);
     // Get domain name and check project
@@ -37,7 +37,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     if ($domain == 'en.wikipedia.org') {
         trigger_error('Sorry, this tool has been disabled for the English Wikipedia.', E_USER_ERROR);
     }
-    
+
     if (!$pcategory || !$tpcategory) {
         trigger_error("Please provide the categories.", E_USER_ERROR);
     }
@@ -53,7 +53,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     } else {
         $limit = 100;
     }
-    
+
     $purge = $_GET['purge'];
     if ($purge) {
         $purge = true;
@@ -61,7 +61,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     else {
         $purge = false;
     }
-          
+
     $d = $_GET['d'];
     if ($d) {
         $d = intval($d);
@@ -70,22 +70,22 @@ if (!empty($_SERVER['QUERY_STRING']))
     } else {
         $d = 10;
     }
-   
-	//Link to local page with variables
-	$link = $_SERVER['PHP_SELF'] . '?lang=' . $lang . '&family=' . $family . '&pcategory=' . $pcategory . '&tpcategory=' . $tpcategory;
-    
+
+        //Link to local page with variables
+        $link = $_SERVER['PHP_SELF'] . '?lang=' . $lang . '&family=' . $family . '&pcategory=' . $pcategory . '&tpcategory=' . $tpcategory;
+
     $cluster = $db->getCluster($domain);
-    
+
     if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
         trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
     } else {
         $db_name = $db->getDatabase($domain);
     }
-    
+
     $renewtree = false;
     $pcategory = ucfirst(str_replace(' ', '_', $pcategory));
     $namespacecond = ($namespace != -1 ? 'page_namespace ' . ($invert ? '!= ' : '= ' ) . intval($namespace) : '');
-    
+
     $sql = 'SHOW TABLES FROM s51362__erwin85 LIKE "sc_' . $db_name . '"';
     $q = $db->performQuery($sql, $cluster);
 
@@ -102,17 +102,17 @@ if (!empty($_SERVER['QUERY_STRING']))
             $renewtree = true;
         }
     }
-    
+
     if ($renewtree || $purge) {
         $db->storeCategoryTree($pcategory, $d, $db_name, $cluster);
         echo '<p>Generated new category tree.</p>';
     }
 
-	echo '&lt; Articles in <a href="http://' . $domain . '/w/index.php?title=Category:' . $pcategory . '" title="Category:' . $pcategory . '">Category:' . str_replace('_', ' ', $pcategory) . '</a> (including subcategories up to level ' . $d . ') with their talk page in <a href="http://' . $domain . '/w/index.php?title=Category:' . $tpcategory . '" title="Category:' . $tpcategory . '">Category:' . str_replace('_', ' ', $tpcategory) . '</a>';
-	        
+        echo '&lt; Articles in <a href="http://' . $domain . '/w/index.php?title=Category:' . $pcategory . '" title="Category:' . $pcategory . '">Category:' . str_replace('_', ' ', $pcategory) . '</a> (including subcategories up to level ' . $d . ') with their talk page in <a href="http://' . $domain . '/w/index.php?title=Category:' . $tpcategory . '" title="Category:' . $tpcategory . '">Category:' . str_replace('_', ' ', $tpcategory) . '</a>';
+
 
     echo '<div class="rcoptions">Show last <a href="' . $link . '&limit=50">50</a> | <a href="' . $link . '&limit=100">100</a> | <a href="' . $link . '&limit=250">250</a> | <a href="' . $link . '&limit=500">500</a> pages. </div>';
-    
+
     $sql = 'SELECT p.page_namespace as p_ns, p.page_title, tp.page_namespace as tp_ns
            FROM ' . $db_name . '.page AS tp
            LEFT JOIN ' . $db_name . '.categorylinks as tp_cl
@@ -137,15 +137,15 @@ if (!empty($_SERVER['QUERY_STRING']))
     }
     echo '<ul>';
     while ($row = mysql_fetch_assoc($q))
-	{
-	    $p_namespace = $db->getNamespace($row['p_ns'], $db_name);
-	    $p_namespace = ($p_namespace ? $p_namespace . ':' : '');
-	    $tp_namespace = $db->getNamespace($row['tp_ns'], $db_name);
-	    $tp_namespace = ($tp_namespace ? $tp_namespace . ':' : '');
-    	$page_title = $namespace . str_replace('_', ' ', $row['page_title']);
+        {
+            $p_namespace = $db->getNamespace($row['p_ns'], $db_name);
+            $p_namespace = ($p_namespace ? $p_namespace . ':' : '');
+            $tp_namespace = $db->getNamespace($row['tp_ns'], $db_name);
+            $tp_namespace = ($tp_namespace ? $tp_namespace . ':' : '');
+        $page_title = $namespace . str_replace('_', ' ', $row['page_title']);
         echo '<li> <a href="http://' . $domain . '/w/index.php?title=' . $p_namespace . $page_title . '" title="' . $p_namespace . $page_title . '">' . $p_namespace . $page_title . '</a> (<a href="http://' . $domain . '/w/index.php?title=' . $tp_namespace . $page_title . '" title="' . $tp_namespace . $page_title . '">Talk</a>)</li>';
-	}
-	echo '</ul>';
+        }
+        echo '</ul>';
 }
 else
 {

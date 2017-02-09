@@ -24,9 +24,9 @@ require_once '../inc/header.inc.php';
 <?php
 if (!empty($_SERVER['QUERY_STRING']))
 {
-    $category = mysql_real_escape_string($_GET['category']);  
+    $category = mysql_real_escape_string($_GET['category']);
     $category = ucfirst(str_replace(' ', '_', $category));
-    
+
     if (!$category) {
         trigger_error('Geef a.u.b. een categorie op.', E_USER_ERROR);
     }
@@ -42,7 +42,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     } else {
         $limit = 100;
     }
-    
+
     $purge = $_GET['purge'];
     if ($purge) {
         $purge = true;
@@ -50,7 +50,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     else {
         $purge = false;
     }
-          
+
     $d = $_GET['d'];
     if ($d) {
         $d = intval($d);
@@ -60,17 +60,17 @@ if (!empty($_SERVER['QUERY_STRING']))
         $d = 10;
     }
 
-	//Link to local page with variables
-	$link = $_SERVER['PHP_SELF'] . '?category=' . $category;  
-    
+        //Link to local page with variables
+        $link = $_SERVER['PHP_SELF'] . '?category=' . $category;
+
     if ($db->status[$cluster][0] == 'ERRO' || $db->status[$cluster][0] == 'DOWN') {
         trigger_error('Sorry, this database is not available at the moment.', E_USER_ERROR);
     } else {
         $db_name = $db->getDatabase($domain);
     }
-    
+
     $renewtree = false;
-    
+
     $sql = 'SHOW TABLES FROM u_erwin85 LIKE "sc_' . $db_name . '"';
     $q = $db->performQuery($sql, $cluster);
 
@@ -87,17 +87,17 @@ if (!empty($_SERVER['QUERY_STRING']))
             $renewtree = true;
         }
     }
-    
+
     if ($renewtree || $purge) {
         $db->storeCategoryTree($category, $d, $db_name, $cluster);
         echo '<p>Er is een nieuwe categorieboom gegenereerd.</p>';
     }
 
-	echo '&lt; Artikelen in <a href="http://' . $domain . '/w/index.php?title=Category:' . $category . '" title="Category:' . $category . '">Categorie:' . str_replace('_', ' ', $category) . '</a> (inclusief subcategorieën tot niveau ' . $d . '):';
-	        
+        echo '&lt; Artikelen in <a href="http://' . $domain . '/w/index.php?title=Category:' . $category . '" title="Category:' . $category . '">Categorie:' . str_replace('_', ' ', $category) . '</a> (inclusief subcategorieën tot niveau ' . $d . '):';
+
 
     echo '<div class="rcoptions">Toon <a href="' . $link . '&limit=50">50</a> | <a href="' . $link . '&limit=100">100</a> | <a href="' . $link . '&limit=250">250</a> | <a href="' . $link . '&limit=500">500</a> pagina\'s. </div>';
-    
+
     $sql = 'SELECT p.page_namespace as p_ns, p.page_title, tp.page_namespace as tp_ns
            FROM ' . $db_name . '.page AS tp
            LEFT JOIN ' . $db_name . '.categorylinks as tp_cl
@@ -123,15 +123,15 @@ if (!empty($_SERVER['QUERY_STRING']))
     }
     echo '<ul>';
     while ($row = mysql_fetch_assoc($q))
-	{
-	    $p_namespace = $db->getNamespace($row['p_ns'], $db_name);
-	    $p_namespace = ($p_namespace ? $p_namespace . ':' : '');
-	    $tp_namespace = $db->getNamespace($row['tp_ns'], $db_name);
-	    $tp_namespace = ($tp_namespace ? $tp_namespace . ':' : '');
-    	$page_title = $namespace . str_replace('_', ' ', $row['page_title']);
+        {
+            $p_namespace = $db->getNamespace($row['p_ns'], $db_name);
+            $p_namespace = ($p_namespace ? $p_namespace . ':' : '');
+            $tp_namespace = $db->getNamespace($row['tp_ns'], $db_name);
+            $tp_namespace = ($tp_namespace ? $tp_namespace . ':' : '');
+        $page_title = $namespace . str_replace('_', ' ', $row['page_title']);
         echo '<li> <a href="http://' . $domain . '/wiki/' . $p_namespace . $page_title . '" title="' . $p_namespace . $page_title . '">' . $p_namespace . $page_title . '</a> (<a href="http://' . $domain . '/wiki/' . $tp_namespace . $page_title . '" title="' . $tp_namespace . $page_title . '">Overleg</a>)</li>';
-	}
-	echo '</ul>';
+        }
+        echo '</ul>';
 }
 else
 {

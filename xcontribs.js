@@ -5,7 +5,7 @@ var yoffset = -30;
 
 document.onmousemove = function(e) {
   var x, y, right, bottom;
-  
+
   try { x = e.pageX; y = e.pageY; } // FF
   catch(e) { x = event.x; y = event.y; } // IE
 
@@ -17,7 +17,7 @@ document.onmousemove = function(e) {
 
   if(x > right-pop.offsetWidth)
     x = right-pop.offsetWidth;
- 
+
   if(y > bottom-pop.offsetHeight)
     y = bottom-pop.offsetHeight;
 

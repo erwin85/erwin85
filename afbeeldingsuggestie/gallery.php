@@ -25,7 +25,7 @@ if (!empty($_SERVER['QUERY_STRING']))
     $title = mysql_real_escape_string($_GET['title']);
     $title = str_replace(' ', '_', $title);
     $title = ucfirst($title);
- 
+
     $sql = 'SELECT il_to, ll_lang, il_commons, COUNT(ll_lang) AS ll_langs
             FROM u_erwin85.img_imagelinks
             WHERE page_title = \'' . $title . '\'
