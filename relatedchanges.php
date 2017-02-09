@@ -114,6 +114,13 @@ if (!empty($_SERVER['QUERY_STRING']))
         $hidewikidata = '';
     }
 
+    $hidecategory = $_GET['hidecategory'];
+    if ($hidecategory) {
+        $hidecategory = 'AND rc_type != 6 ';
+    } else {
+        $hidecategory = '';
+    }
+
     $d = $_GET['d'];
     if ($d) {
         $d = intval($d);
@@ -125,7 +132,7 @@ if (!empty($_SERVER['QUERY_STRING']))
 
         //Link to local page with variables
         $link = $_SERVER['PHP_SELF'] . '?lang=' . $lang . '&family=' . $family . '&category=' . $category . '&d=' . $d . '&ignore=' . $ignore;
-    $hide = ($hideminor ? '&hideminor=1' : '') . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '');
+    $hide = ($hideminor ? '&hideminor=1' : '') . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . ($hidecategory ? '&hidecategory=1' : '');
 
     $cluster = $db->getCluster($domain);
 
@@ -172,12 +179,13 @@ if (!empty($_SERVER['QUERY_STRING']))
     echo '<div class="rcoptions">Show last <a href="' . $link . $hide . '&limit=50" title="relatedchanges">50</a> | <a href="' . $link . $hide . '&limit=100" title="relatedchanges">100</a> | <a href="' . $link . $hide . '&limit=250" title="relatedchanges">250</a> | <a href="' . $link . $hide . '&limit=500" title="relatedchanges">500</a> changes in last <a href="' . $link . $hide . '&days=1" title="relatedchanges">1</a> | <a href="' . $link . $hide . '&days=3" title="relatedchanges">3</a> | <a href="' . $link . $hide . '&days=7" title="relatedchanges">7</a> | <a href="' . $link . $hide . '&days=14" title="relatedchanges">14</a> | <a href="' . $link . $hide . '&days=30" title="relatedchanges">30</a> days';
 
     echo '<br>';
-    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . '&hideminor=' . ($hideminor ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' minor edits | ';
-    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . '&hidebots=' . ($hidebots ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' bots | ';
-    echo '<a href="' . $link . ($hideminor ? '&hideminor=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . '&hideanons=' . ($hideanons ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' anonymous users | ';
-    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . '&hideliu=' . ($hideliu ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' logged-in users | ';
-    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . '&hidepatrolled=' . ($hidepatrolled ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' patrolled edits | ';
-    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidewikipatrolled ? '&hidepatrolled=1' : '') . '&hidewikidata=' . ($hidewikidata ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' wikidata edits';
+    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . ($hidecategory ? '&hidecategory=1' : '') . '&hideminor=' . ($hideminor ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' minor edits | ';
+    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . ($hidecategory ? '&hidecategory=1' : '') . '&hidebots=' . ($hidebots ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' bots | ';
+    echo '<a href="' . $link . ($hideminor ? '&hideminor=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . ($hidecategory ? '&hidecategory=1' : '') . '&hideanons=' . ($hideanons ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' anonymous users | ';
+    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hidepatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . ($hidecategory ? '&hidecategory=1' : '') . '&hideliu=' . ($hideliu ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' logged-in users | ';
+    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . ($hidecategory ? '&hidecategory=1' : '') . '&hidepatrolled=' . ($hidepatrolled ? '0" title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' patrolled edits | ';
+    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidewikipatrolled ? '&hidepatrolled=1' : '') . ($hidecategory ? '&hidecategory=1' : '') . '&hidewikidata=' . ($hidewikidata ? '0"  title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' wikidata edits | ';
+    echo '<a href="' . $link . ($hideanons ? '&hideanons=1' : '') . ($hidebots ? '&hidebots=1' : '') . ($hideminor ? '&hideminor=1' : '') . ($hideliu ? '&hideliu=1' : '') . ($hidewikipatrolled ? '&hidepatrolled=1' : '') . ($hidewikidata ? '&hidewikidata=1' : '') . '&hidecategory=' . ($hidecategory ? '0"  title="relatedchanges">Show</a>' : '1" title="relatedchanges">Hide</a>' ) . ' category edits';
 
     echo '</div><ul>';
 
@@ -191,7 +199,7 @@ if (!empty($_SERVER['QUERY_STRING']))
            ON cl_to = sc_category
            WHERE sc_depth < ' . $d . '
            AND sc_supercategory = \'' . $category . '\'' .
-           $hideminor . $hidebots . $hideanons . $hideliu . $hidepatrolled . $hidewikidata .
+           $hideminor . $hidebots . $hideanons . $hideliu . $hidepatrolled . $hidewikidata . $hidecategory .
            ((isset($ignore) && !empty($ignore)) ? ' AND rc_user_text != \'' . $ignore . '\'' : '') .
            ' AND rc_timestamp > ' . $cutoff . ' GROUP BY rc_id ORDER BY rc_timestamp DESC LIMIT ' . $limit;
 
@@ -317,6 +325,14 @@ else
         </td>
         <td>
                 <input type="checkbox" name="hidewikidata" value="1">
+        </td>
+</tr>
+<tr>
+        <td style = "text-align: right;">
+                Hide category edits:
+        </td>
+        <td>
+                <input type="checkbox" name="hidecategory" value="1">
         </td>
 </tr>
 <tr>
