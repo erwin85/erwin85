@@ -11,7 +11,7 @@ require_once 'inc/header.inc.php';
 // Page content
 ?>
 <p>
-<b>related changes</b> shows the changes related to a category and it's subcategories.
+<b>related changes</b> shows the changes related to a category and its subcategories.
 </p>
 <?php
 if (!empty($_SERVER['QUERY_STRING']))
